@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Evolution WebSocket Test</title>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+</head>
+<body>
+  <a href="index.html">Home Page</a>
+
+<h2>Evolution WebSocket Test</h2>
+
+<button onclick="connect()">Connect</button>
+<pre id="log"></pre>
+
+<script>
+function log(x) {
+  document.getElementById("log").textContent += x + "\n";
+}
+
+function connect() {
+
+  const api = "https://evolution-api-hi.up.railway.app/";
+  const instance = "ws";
+
+  const socket = io(
+    `${api}/${instance}`,
+    {
+      transports: ["websocket"]
+    }
+  );
+
+  socket.on("connect", () => {
+    log("CONNECTED ✅");
+    log("Socket ID: " + socket.id);
+  });
+
+  socket.on("disconnect", reason => {
+    log("DISCONNECTED ❌ " + reason);
+  });
+
+  socket.on("connect_error", error => {
+    log("ERROR ❌ " + error.message);
+  });
+
+  socket.onAny((event, ...args) => {
+    log("\nEVENT: " + event);
+    log(JSON.stringify(args, null, 2));
+  });
+}
+</script>
+
+</body>
+</html>
