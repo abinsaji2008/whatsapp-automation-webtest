@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Evolution API WhatsApp Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Evolution WhatsApp Chat</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
     background:#111b21;
     color:#e9edef;
-    font-family:Arial,sans-serif;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 .app{
@@ -21,68 +24,91 @@ body{
     flex-direction:column;
 }
 
-/* TOP */
+/* ================= HEADER ================= */
 
-.top{
+.header{
     background:#202c33;
     padding:12px;
     display:flex;
-    gap:8px;
-    flex-wrap:wrap;
+    align-items:center;
+    gap:12px;
 }
 
-.top input{
+.avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#00a884;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+.title{
+    font-size:17px;
+    font-weight:bold;
+}
+
+.subtitle{
+    font-size:12px;
+    color:#8696a0;
+    margin-top:3px;
+}
+
+/* ================= SETTINGS ================= */
+
+.settings{
+    background:#182229;
+    padding:10px;
+    display:grid;
+    grid-template-columns:2fr 1fr 1.5fr 2fr 100px;
+    gap:8px;
+}
+
+.settings input{
+    width:100%;
+    padding:10px;
     background:#2a3942;
     color:white;
     border:1px solid #3b4a54;
     border-radius:6px;
-    padding:10px;
     outline:none;
 }
 
-.url{
-    flex:2;
-    min-width:220px;
-}
-
-.instance{
-    flex:1;
-    min-width:120px;
-}
-
-.phone{
-    flex:1;
-    min-width:150px;
-}
-
-.key{
-    flex:2;
-    min-width:180px;
-}
-
 button{
-    border:0;
-    border-radius:6px;
-    padding:10px 16px;
     background:#00a884;
+    border:0;
     color:white;
+    border-radius:6px;
     cursor:pointer;
+    padding:10px;
 }
 
 button:hover{
     background:#008f72;
 }
 
-/* INFO */
+/* ================= STATUS ================= */
 
-.info{
+.status{
     background:#182229;
-    padding:8px 15px;
-    font-size:13px;
     color:#aebac1;
+    font-size:13px;
+    padding:7px 12px;
 }
 
-/* CHAT */
+.error{
+    background:#4b2020;
+    color:#ffb4b4;
+    padding:10px;
+    margin:10px;
+    border-radius:6px;
+    white-space:pre-wrap;
+    display:none;
+}
+
+/* ================= CHAT ================= */
 
 .chat{
     flex:1;
@@ -92,19 +118,9 @@ button:hover{
 
 .loading{
     text-align:center;
-    padding:12px;
     color:#8696a0;
-    display:none;
-}
-
-.error{
-    background:#4b2020;
-    color:#ffb3b3;
     padding:10px;
-    margin-bottom:10px;
-    border-radius:6px;
     display:none;
-    white-space:pre-wrap;
 }
 
 .end{
@@ -114,18 +130,18 @@ button:hover{
     padding:15px;
 }
 
-/* MESSAGE */
+/* ================= MESSAGES ================= */
 
 .message{
     display:flex;
     margin:5px 0;
 }
 
-.message.in{
+.message.incoming{
     justify-content:flex-start;
 }
 
-.message.out{
+.message.outgoing{
     justify-content:flex-end;
 }
 
@@ -136,16 +152,17 @@ button:hover{
     word-break:break-word;
 }
 
-.in .bubble{
+.incoming .bubble{
     background:#202c33;
 }
 
-.out .bubble{
+.outgoing .bubble{
     background:#005c4b;
 }
 
 .text{
     white-space:pre-wrap;
+    font-size:15px;
 }
 
 .time{
@@ -155,23 +172,48 @@ button:hover{
     margin-top:4px;
 }
 
-/* BOTTOM */
+/* ================= INPUT ================= */
 
-.bottom{
+.input{
+    background:#202c33;
+    padding:10px;
     display:flex;
     gap:8px;
-    padding:10px;
-    background:#202c33;
 }
 
-.messageInput{
+.input input{
     flex:1;
     background:#2a3942;
     color:white;
     border:0;
-    border-radius:8px;
-    padding:13px;
     outline:none;
+    padding:13px;
+    border-radius:8px;
+}
+
+.send{
+    width:80px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:800px){
+
+    .settings{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .settings input{
+        min-width:0;
+    }
+
+    .settings button{
+        grid-column:span 2;
+    }
+
+    .bubble{
+        max-width:85%;
+    }
 }
 </style>
 </head>
@@ -180,75 +222,129 @@ button:hover{
 
 <div class="app">
 
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="avatar">
+            WA
+        </div>
+
+        <div>
+
+            <div
+                class="title"
+                id="title"
+            >
+                WhatsApp Chat
+            </div>
+
+            <div
+                class="subtitle"
+                id="subtitle"
+            >
+                Not connected
+            </div>
+
+        </div>
+
+    </div>
+
+
     <!-- SETTINGS -->
 
-    <div class="top">
+    <div class="settings">
 
         <input
             id="apiUrl"
-            class="url"
             placeholder="Evolution API URL"
             value="https://YOUR-RAILWAY-URL"
         >
 
         <input
             id="instance"
-            class="instance"
             placeholder="Instance"
-            value="YOUR_INSTANCE"
         >
 
         <input
             id="phone"
-            class="phone"
-            placeholder="Phone: 919876543210"
+            placeholder="Phone e.g. 919605515958"
+            value="919605515958"
         >
 
         <input
             id="apiKey"
-            class="key"
             type="password"
-            placeholder="API Key"
+            placeholder="Evolution API Key"
         >
 
-        <button onclick="connect()">
-            Load Chat
+        <button
+            onclick="connect()"
+        >
+            Connect
         </button>
 
     </div>
 
-    <div class="info" id="info">
+
+    <!-- STATUS -->
+
+    <div
+        class="status"
+        id="status"
+    >
         Not connected
     </div>
 
+
+    <!-- ERROR -->
+
+    <div
+        class="error"
+        id="error"
+    ></div>
+
+
     <!-- CHAT -->
 
-    <div id="chat" class="chat">
+    <div
+        class="chat"
+        id="chat"
+    >
 
-        <div id="error" class="error"></div>
-
-        <div id="loading" class="loading">
-            Loading messages...
+        <div
+            class="loading"
+            id="loading"
+        >
+            Loading...
         </div>
 
-        <div id="messages"></div>
+        <div
+            id="messages"
+        ></div>
 
-        <div id="end" class="end"></div>
+        <div
+            class="end"
+            id="end"
+        ></div>
 
     </div>
 
+
     <!-- SEND -->
 
-    <div class="bottom">
+    <div class="input">
 
         <input
             id="messageInput"
-            class="messageInput"
-            placeholder="Type message..."
-            onkeydown="enterSend(event)"
+            placeholder="Type a message..."
+            onkeydown="handleEnter(event)"
         >
 
-        <button onclick="sendMessage()">
+        <button
+            class="send"
+            onclick="sendMessage()"
+        >
             Send
         </button>
 
@@ -260,7 +356,7 @@ button:hover{
 <script>
 
 /* =========================================================
-   VARIABLES
+   GLOBAL VARIABLES
 ========================================================= */
 
 let API_URL = "";
@@ -268,36 +364,55 @@ let API_KEY = "";
 let INSTANCE = "";
 let PHONE = "";
 
+let CHAT_JID = "";
+
 let page = 1;
-const limit = 30;
+
+const LIMIT = 30;
 
 let loading = false;
+
 let hasMore = true;
 
-let messageIds = new Set();
+let messagesLoaded = 0;
+
+const messageIds =
+    new Set();
 
 
 /* =========================================================
-   ELEMENTS
+   DOM
 ========================================================= */
 
 const chat =
-    document.getElementById("chat");
+    document.getElementById(
+        "chat"
+    );
 
 const messages =
-    document.getElementById("messages");
+    document.getElementById(
+        "messages"
+    );
 
 const loadingElement =
-    document.getElementById("loading");
+    document.getElementById(
+        "loading"
+    );
 
 const errorElement =
-    document.getElementById("error");
+    document.getElementById(
+        "error"
+    );
 
 const endElement =
-    document.getElementById("end");
+    document.getElementById(
+        "end"
+    );
 
-const infoElement =
-    document.getElementById("info");
+const statusElement =
+    document.getElementById(
+        "status"
+    );
 
 
 /* =========================================================
@@ -306,56 +421,81 @@ const infoElement =
 
 async function connect(){
 
+    clearError();
+
+
     API_URL =
         document
-        .getElementById("apiUrl")
+        .getElementById(
+            "apiUrl"
+        )
         .value
         .trim()
-        .replace(/\/$/,"");
+        .replace(
+            /\/$/,
+            ""
+        );
+
 
     API_KEY =
         document
-        .getElementById("apiKey")
+        .getElementById(
+            "apiKey"
+        )
         .value
         .trim();
+
 
     INSTANCE =
         document
-        .getElementById("instance")
+        .getElementById(
+            "instance"
+        )
         .value
         .trim();
 
+
     PHONE =
         document
-        .getElementById("phone")
+        .getElementById(
+            "phone"
+        )
         .value
         .trim()
-        .replace(/\D/g,"");
+        .replace(
+            /\D/g,
+            ""
+        );
 
 
-    if(!API_URL){
-        showError("Evolution API URL is missing.");
+    if(
+        !API_URL ||
+        !API_KEY ||
+        !INSTANCE ||
+        !PHONE
+    ){
+
+        showError(
+            "Please enter API URL, instance, phone and API key."
+        );
+
         return;
+
     }
 
-    if(!API_KEY){
-        showError("API key is missing.");
-        return;
-    }
 
-    if(!INSTANCE){
-        showError("Instance name is missing.");
-        return;
-    }
-
-    if(!PHONE){
-        showError("Phone number is missing.");
-        return;
-    }
+    CHAT_JID =
+        PHONE +
+        "@s.whatsapp.net";
 
 
     page = 1;
+
     hasMore = true;
+
+    loading = false;
+
+    messagesLoaded = 0;
 
     messageIds.clear();
 
@@ -363,11 +503,68 @@ async function connect(){
 
     endElement.innerText = "";
 
-    infoElement.innerText =
-        "Loading chat for +" + PHONE;
+
+    document
+        .getElementById(
+            "title"
+        )
+        .innerText =
+        "+" + PHONE;
 
 
-    await loadMessages(true);
+    document
+        .getElementById(
+            "subtitle"
+        )
+        .innerText =
+        CHAT_JID;
+
+
+    setStatus(
+        "Connecting to Evolution API..."
+    );
+
+
+    try{
+
+        /*
+         * First check that Evolution API
+         * itself is reachable.
+         */
+
+        await testConnection();
+
+
+        /*
+         * Try to find the actual chat/JID.
+         */
+
+        setStatus(
+            "Finding chat..."
+        );
+
+
+        await findChat();
+
+
+        /*
+         * Load latest messages.
+         */
+
+        await loadMessages(
+            true
+        );
+
+
+    }
+    catch(error){
+
+        showError(
+            error.message
+        );
+
+    }
+
 }
 
 
@@ -377,13 +574,13 @@ async function connect(){
 
 async function apiRequest(
     endpoint,
-    method = "GET",
-    body = null
+    method="GET",
+    body=null
 ){
 
     const options = {
 
-        method,
+        method:method,
 
         headers:{
             "Content-Type":
@@ -396,17 +593,29 @@ async function apiRequest(
     };
 
 
-    if(body !== null){
+    if(
+        body !== null
+    ){
 
         options.body =
-            JSON.stringify(body);
+            JSON.stringify(
+                body
+            );
 
     }
 
 
+    console.log(
+        "API REQUEST:",
+        API_URL +
+        endpoint
+    );
+
+
     const response =
         await fetch(
-            API_URL + endpoint,
+            API_URL +
+            endpoint,
             options
         );
 
@@ -415,7 +624,19 @@ async function apiRequest(
         await response.text();
 
 
+    console.log(
+        "HTTP:",
+        response.status
+    );
+
+    console.log(
+        "RESPONSE:",
+        text
+    );
+
+
     let data;
+
 
     try{
 
@@ -432,27 +653,281 @@ async function apiRequest(
     }
 
 
-    if(!response.ok){
+    if(
+        !response.ok
+    ){
 
         throw new Error(
+
             "HTTP " +
             response.status +
             "\n\n" +
+
             (
-                typeof data === "string"
-                    ? data
-                    : JSON.stringify(
-                        data,
-                        null,
-                        2
-                    )
+                typeof data ===
+                "string"
+
+                ? data
+
+                : JSON.stringify(
+                    data,
+                    null,
+                    2
+                )
             )
+
         );
 
     }
 
 
     return data;
+
+}
+
+
+/* =========================================================
+   TEST API
+========================================================= */
+
+async function testConnection(){
+
+    try{
+
+        await apiRequest(
+            "/",
+            "GET"
+        );
+
+        setStatus(
+            "Evolution API reachable"
+        );
+
+    }
+    catch(error){
+
+        throw new Error(
+            "Cannot connect to Evolution API.\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FIND CHAT
+========================================================= */
+
+async function findChat(){
+
+    /*
+     * Try the chats endpoint.
+     */
+
+    const possibleEndpoints = [
+
+        "/chat/findChats/" +
+        encodeURIComponent(
+            INSTANCE
+        ),
+
+        "/chat/findChats/" +
+        encodeURIComponent(
+            INSTANCE
+        )
+
+    ];
+
+
+    let chats = null;
+
+
+    for(
+        const endpoint
+        of possibleEndpoints
+    ){
+
+        try{
+
+            const data =
+                await apiRequest(
+                    endpoint,
+                    "POST",
+                    {
+                        where:{
+                            id:
+                                CHAT_JID
+                        }
+                    }
+                );
+
+
+            chats =
+                extractChats(
+                    data
+                );
+
+
+            if(
+                chats.length
+            ){
+
+                break;
+
+            }
+
+        }
+        catch(error){
+
+            console.warn(
+                "Chat search failed:",
+                error.message
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Even if chat search does not work,
+     * use the normal WhatsApp JID.
+     */
+
+    if(
+        chats &&
+        chats.length
+    ){
+
+        const found =
+            chats.find(
+                chat => {
+
+                    const jid =
+                        getChatJid(
+                            chat
+                        );
+
+                    return (
+                        jid ===
+                        CHAT_JID
+                    );
+
+                }
+            );
+
+
+        if(found){
+
+            CHAT_JID =
+                getChatJid(
+                    found
+                );
+
+        }
+
+    }
+
+
+    console.log(
+        "Using JID:",
+        CHAT_JID
+    );
+
+
+    setStatus(
+        "Using chat: " +
+        CHAT_JID
+    );
+
+}
+
+
+/* =========================================================
+   EXTRACT CHATS
+========================================================= */
+
+function extractChats(
+    data
+){
+
+    if(
+        Array.isArray(
+            data
+        )
+    ){
+
+        return data;
+
+    }
+
+
+    if(
+        data &&
+        Array.isArray(
+            data.chats
+        )
+    ){
+
+        return data.chats;
+
+    }
+
+
+    if(
+        data &&
+        Array.isArray(
+            data.response
+        )
+    ){
+
+        return data.response;
+
+    }
+
+
+    if(
+        data &&
+        Array.isArray(
+            data.data
+        )
+    ){
+
+        return data.data;
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =========================================================
+   CHAT JID
+========================================================= */
+
+function getChatJid(
+    chat
+){
+
+    return (
+
+        chat.id ||
+
+        (
+            chat.key &&
+            chat.key.remoteJid
+        ) ||
+
+        chat.remoteJid ||
+
+        ""
+
+    );
+
 }
 
 
@@ -460,10 +935,17 @@ async function apiRequest(
    LOAD MESSAGES
 ========================================================= */
 
-async function loadMessages(initial=false){
+async function loadMessages(
+    initial=false
+){
 
-    if(loading || !hasMore){
+    if(
+        loading ||
+        !hasMore
+    ){
+
         return;
+
     }
 
 
@@ -472,16 +954,6 @@ async function loadMessages(initial=false){
     loadingElement.style.display =
         "block";
 
-    errorElement.style.display =
-        "none";
-
-
-    /*
-       Save scroll position.
-
-       Required when inserting old
-       messages above existing ones.
-    */
 
     const oldHeight =
         chat.scrollHeight;
@@ -492,21 +964,27 @@ async function loadMessages(initial=false){
 
     try{
 
-        const jid =
-            PHONE +
-            "@s.whatsapp.net";
+        setStatus(
+            "Loading messages..."
+        );
 
 
         /*
-          Evolution API history request.
+         * Main Evolution API endpoint.
+         */
 
-          This is the endpoint used by
-          many Evolution API versions.
+        const endpoint =
 
-          If your version returns an error,
-          the page will now display the
-          exact API response.
-        */
+            "/chat/findMessages/" +
+
+            encodeURIComponent(
+                INSTANCE
+            );
+
+
+        /*
+         * Query the exact JID.
+         */
 
         const body = {
 
@@ -514,39 +992,26 @@ async function loadMessages(initial=false){
 
                 key:{
 
-                    remoteJid:jid
+                    remoteJid:
+                        CHAT_JID
 
                 }
 
             },
 
-            page:page,
+            page:
+                page,
 
-            limit:limit
+            limit:
+                LIMIT
 
         };
-
-
-        console.log(
-            "REQUEST:",
-            API_URL +
-            "/chat/findMessages/" +
-            INSTANCE
-        );
-
-        console.log(
-            "BODY:",
-            body
-        );
 
 
         const data =
             await apiRequest(
 
-                "/chat/findMessages/" +
-                encodeURIComponent(
-                    INSTANCE
-                ),
+                endpoint,
 
                 "POST",
 
@@ -556,100 +1021,80 @@ async function loadMessages(initial=false){
 
 
         console.log(
-            "EVOLUTION RESPONSE:",
+            "MESSAGE DATA:",
             data
         );
 
 
         const list =
-            extractMessages(data);
+            extractMessages(
+                data
+            );
 
 
-        if(!list.length){
+        console.log(
+            "MESSAGES FOUND:",
+            list.length
+        );
+
+
+        if(
+            !list.length
+        ){
+
+            if(
+                initial
+            ){
+
+                /*
+                 * Try the alternative
+                 * query format.
+                 */
+
+                const alternative =
+                    await tryAlternativeHistory();
+
+
+                if(
+                    alternative.length
+                ){
+
+                    displayMessages(
+                        alternative,
+                        true
+                    );
+
+                    return;
+
+                }
+
+            }
+
 
             hasMore = false;
 
             endElement.innerText =
-                "No more messages";
-
-            infoElement.innerText =
                 "No messages found for +" +
                 PHONE;
 
+            setStatus(
+                "Connected, but Evolution API returned 0 messages."
+            );
+
             return;
+
         }
 
 
-        /*
-          Remove duplicates.
-        */
-
-        const unique =
-            list.filter(
-                msg => {
-
-                    const id =
-                        getId(msg);
-
-                    if(
-                        messageIds.has(id)
-                    ){
-                        return false;
-                    }
-
-                    messageIds.add(id);
-
-                    return true;
-
-                }
-            );
-
-
-        /*
-          Sort old → new.
-        */
-
-        unique.sort(
-            (a,b)=>
-                getTimestamp(a) -
-                getTimestamp(b)
+        displayMessages(
+            list,
+            initial
         );
 
 
-        /*
-          Initial = add normally.
-
-          Older = add at top.
-        */
-
-        if(initial){
-
-            unique.forEach(
-                addMessage
-            );
-
-        }
-        else{
-
-            unique
-                .reverse()
-                .forEach(
-                    addMessageTop
-                );
-
-        }
-
-
-        /*
-          Pagination.
-
-          If fewer than requested were
-          returned, assume we're at the
-          beginning.
-        */
-
         if(
-            list.length < limit
+            list.length <
+            LIMIT
         ){
 
             hasMore = false;
@@ -665,53 +1110,15 @@ async function loadMessages(initial=false){
         }
 
 
-        /*
-          Preserve scroll position
-          when loading older messages.
-        */
-
-        if(!initial){
-
-            const newHeight =
-                chat.scrollHeight;
-
-            chat.scrollTop =
-                oldTop +
-                (
-                    newHeight -
-                    oldHeight
-                );
-
-        }
-        else{
-
-            /*
-              Start at bottom.
-            */
-
-            setTimeout(
-                () => {
-
-                    chat.scrollTop =
-                        chat.scrollHeight;
-
-                },
-                50
-            );
-
-        }
-
-
-        infoElement.innerText =
+        setStatus(
             "Loaded " +
-            messageIds.size +
-            " messages";
+            messagesLoaded +
+            " messages"
+        );
 
 
     }
     catch(error){
-
-        console.error(error);
 
         showError(
             "FAILED TO LOAD MESSAGES\n\n" +
@@ -732,18 +1139,260 @@ async function loadMessages(initial=false){
 
 
 /* =========================================================
+   ALTERNATIVE HISTORY QUERY
+========================================================= */
+
+async function tryAlternativeHistory(){
+
+    console.log(
+        "Trying alternative history query..."
+    );
+
+
+    const endpoint =
+
+        "/chat/findMessages/" +
+
+        encodeURIComponent(
+            INSTANCE
+        );
+
+
+    const queries = [
+
+        {
+            where:{
+                key:{
+                    remoteJid:
+                        CHAT_JID
+                }
+            },
+
+            page:page,
+
+            limit:LIMIT
+        },
+
+
+        {
+            where:{
+                remoteJid:
+                    CHAT_JID
+            },
+
+            page:page,
+
+            limit:LIMIT
+        },
+
+
+        {
+            remoteJid:
+                CHAT_JID,
+
+            page:page,
+
+            limit:LIMIT
+        }
+
+    ];
+
+
+    for(
+        const body
+        of queries
+    ){
+
+        try{
+
+            const data =
+                await apiRequest(
+
+                    endpoint,
+
+                    "POST",
+
+                    body
+
+                );
+
+
+            const list =
+                extractMessages(
+                    data
+                );
+
+
+            if(
+                list.length
+            ){
+
+                console.log(
+                    "Alternative query worked:",
+                    body
+                );
+
+                return list;
+
+            }
+
+        }
+        catch(error){
+
+            console.warn(
+                "Alternative failed:",
+                error.message
+            );
+
+        }
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =========================================================
+   DISPLAY MESSAGES
+========================================================= */
+
+function displayMessages(
+    list,
+    initial
+){
+
+    const oldHeight =
+        chat.scrollHeight;
+
+    const oldTop =
+        chat.scrollTop;
+
+
+    const unique = [];
+
+
+    for(
+        const msg
+        of list
+    ){
+
+        const id =
+            getId(
+                msg
+            );
+
+
+        if(
+            messageIds.has(
+                id
+            )
+        ){
+
+            continue;
+
+        }
+
+
+        messageIds.add(
+            id
+        );
+
+
+        unique.push(
+            msg
+        );
+
+    }
+
+
+    unique.sort(
+        (a,b)=>
+            getTimestamp(a) -
+            getTimestamp(b)
+    );
+
+
+    if(
+        initial
+    ){
+
+        unique.forEach(
+            msg =>
+                addMessage(
+                    msg
+                )
+        );
+
+    }
+    else{
+
+        unique
+            .reverse()
+            .forEach(
+                msg =>
+                    addMessageTop(
+                        msg
+                    )
+            );
+
+    }
+
+
+    messagesLoaded =
+        messageIds.size;
+
+
+    if(
+        !initial
+    ){
+
+        const newHeight =
+            chat.scrollHeight;
+
+
+        chat.scrollTop =
+            oldTop +
+            (
+                newHeight -
+                oldHeight
+            );
+
+    }
+    else{
+
+        setTimeout(
+            () => {
+
+                chat.scrollTop =
+                    chat.scrollHeight;
+
+            },
+            100
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    EXTRACT MESSAGES
 ========================================================= */
 
-function extractMessages(data){
+function extractMessages(
+    data
+){
 
-    /*
-      Different Evolution API versions
-      can return different structures.
-    */
+    if(
+        Array.isArray(
+            data
+        )
+    ){
 
-    if(Array.isArray(data)){
         return data;
+
     }
 
 
@@ -753,7 +1402,9 @@ function extractMessages(data){
             data.messages
         )
     ){
+
         return data.messages;
+
     }
 
 
@@ -763,7 +1414,9 @@ function extractMessages(data){
             data.response
         )
     ){
+
         return data.response;
+
     }
 
 
@@ -774,18 +1427,21 @@ function extractMessages(data){
             data.response.messages
         )
     ){
+
         return data.response.messages;
+
     }
 
 
     if(
         data &&
-        data.data &&
         Array.isArray(
             data.data
         )
     ){
+
         return data.data;
+
     }
 
 
@@ -796,7 +1452,9 @@ function extractMessages(data){
             data.data.messages
         )
     ){
+
         return data.data.messages;
+
     }
 
 
@@ -806,53 +1464,17 @@ function extractMessages(data){
 
 
 /* =========================================================
-   SCROLL UP
-========================================================= */
-
-chat.addEventListener(
-    "scroll",
-    () => {
-
-        if(
-            chat.scrollTop <= 120 &&
-            !loading &&
-            hasMore
-        ){
-
-            loadMessages(false);
-
-        }
-
-    }
-);
-
-
-/* =========================================================
    ADD MESSAGE
 ========================================================= */
 
-function addMessage(msg){
-
-    const id =
-        getId(msg);
-
-
-    if(
-        messageIds.has(
-            "rendered-" + id
-        )
-    ){
-        return;
-    }
-
-
-    messageIds.add(
-        "rendered-" + id
-    );
-
+function addMessage(
+    msg
+){
 
     const element =
-        createMessage(msg);
+        createMessage(
+            msg
+        );
 
 
     messages.appendChild(
@@ -866,14 +1488,14 @@ function addMessage(msg){
    ADD MESSAGE TOP
 ========================================================= */
 
-function addMessageTop(msg){
-
-    const id =
-        getId(msg);
-
+function addMessageTop(
+    msg
+){
 
     const element =
-        createMessage(msg);
+        createMessage(
+            msg
+        );
 
 
     messages.prepend(
@@ -887,7 +1509,9 @@ function addMessageTop(msg){
    CREATE MESSAGE
 ========================================================= */
 
-function createMessage(msg){
+function createMessage(
+    msg
+){
 
     const fromMe =
         !!(
@@ -901,12 +1525,13 @@ function createMessage(msg){
             "div"
         );
 
+
     wrapper.className =
         "message " +
         (
             fromMe
-                ? "out"
-                : "in"
+                ? "outgoing"
+                : "incoming"
         );
 
 
@@ -914,6 +1539,7 @@ function createMessage(msg){
         document.createElement(
             "div"
         );
+
 
     bubble.className =
         "bubble";
@@ -924,11 +1550,15 @@ function createMessage(msg){
             "div"
         );
 
+
     text.className =
         "text";
 
+
     text.innerText =
-        getText(msg);
+        getMessageText(
+            msg
+        );
 
 
     const time =
@@ -936,12 +1566,16 @@ function createMessage(msg){
             "div"
         );
 
+
     time.className =
         "time";
 
+
     time.innerText =
         formatTime(
-            getTimestamp(msg)
+            getTimestamp(
+                msg
+            )
         );
 
 
@@ -964,10 +1598,12 @@ function createMessage(msg){
 
 
 /* =========================================================
-   GET TEXT
+   MESSAGE TEXT
 ========================================================= */
 
-function getText(msg){
+function getMessageText(
+    msg
+){
 
     const m =
         msg.message ||
@@ -989,9 +1625,7 @@ function getText(msg){
     ){
 
         return (
-            m
-            .extendedTextMessage
-            .text ||
+            m.extendedTextMessage.text ||
             ""
         );
 
@@ -1005,9 +1639,7 @@ function getText(msg){
         return (
             "📷 " +
             (
-                m
-                .imageMessage
-                .caption ||
+                m.imageMessage.caption ||
                 "Image"
             )
         );
@@ -1022,9 +1654,7 @@ function getText(msg){
         return (
             "🎥 " +
             (
-                m
-                .videoMessage
-                .caption ||
+                m.videoMessage.caption ||
                 "Video"
             )
         );
@@ -1048,9 +1678,7 @@ function getText(msg){
         return (
             "📄 " +
             (
-                m
-                .documentMessage
-                .fileName ||
+                m.documentMessage.fileName ||
                 "Document"
             )
         );
@@ -1058,28 +1686,45 @@ function getText(msg){
     }
 
 
+    if(
+        m.stickerMessage
+    ){
+
+        return "🖼️ Sticker";
+
+    }
+
+
     return (
         msg.messageType ||
-        "Unsupported message"
+        "Message"
     );
 
 }
 
 
 /* =========================================================
-   ID
+   MESSAGE ID
 ========================================================= */
 
-function getId(msg){
+function getId(
+    msg
+){
 
     return (
+
         msg.key &&
         msg.key.id
+
     ) ||
+
     msg.id ||
+
     (
         "generated-" +
         Math.random()
+            .toString(36)
+            .slice(2)
     );
 
 }
@@ -1089,36 +1734,46 @@ function getId(msg){
    TIMESTAMP
 ========================================================= */
 
-function getTimestamp(msg){
+function getTimestamp(
+    msg
+){
 
-    let t =
+    let timestamp =
+
         msg.messageTimestamp ||
+
         msg.timestamp ||
+
         0;
 
 
     if(
-        typeof t === "object"
+        typeof timestamp ===
+        "object"
     ){
 
-        t =
-            t.low ||
-            t.seconds ||
+        timestamp =
+
+            timestamp.low ||
+
+            timestamp.seconds ||
+
             0;
 
     }
 
 
     if(
-        t > 100000000000
+        timestamp >
+        100000000000
     ){
 
-        return t;
+        return timestamp;
 
     }
 
 
-    return t * 1000;
+    return timestamp * 1000;
 
 }
 
@@ -1127,34 +1782,64 @@ function getTimestamp(msg){
    TIME
 ========================================================= */
 
-function formatTime(t){
+function formatTime(
+    timestamp
+){
 
-    if(!t){
+    if(
+        !timestamp
+    ){
+
         return "";
+
     }
 
 
-    return new Date(t)
-        .toLocaleTimeString(
-            [],
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
+    return new Date(
+        timestamp
+    ).toLocaleTimeString(
+        [],
+        {
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
 
 }
 
 
 /* =========================================================
-   SEND
+   SCROLL UP
+========================================================= */
+
+chat.addEventListener(
+    "scroll",
+    () => {
+
+        if(
+            chat.scrollTop <= 120 &&
+            !loading &&
+            hasMore
+        ){
+
+            loadMessages(
+                false
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SEND MESSAGE
 ========================================================= */
 
 async function sendMessage(){
 
     const input =
-        document
-        .getElementById(
+        document.getElementById(
             "messageInput"
         );
 
@@ -1163,8 +1848,12 @@ async function sendMessage(){
         input.value.trim();
 
 
-    if(!text){
+    if(
+        !text
+    ){
+
         return;
+
     }
 
 
@@ -1173,6 +1862,7 @@ async function sendMessage(){
         await apiRequest(
 
             "/message/sendText/" +
+
             encodeURIComponent(
                 INSTANCE
             ),
@@ -1180,8 +1870,12 @@ async function sendMessage(){
             "POST",
 
             {
-                number:PHONE,
-                text:text
+                number:
+                    PHONE,
+
+                text:
+                    text
+
             }
 
         );
@@ -1189,8 +1883,9 @@ async function sendMessage(){
 
         input.value = "";
 
-        infoElement.innerText =
-            "Message sent";
+        setStatus(
+            "Message sent"
+        );
 
 
     }
@@ -1207,13 +1902,16 @@ async function sendMessage(){
 
 
 /* =========================================================
-   ENTER
+   ENTER SEND
 ========================================================= */
 
-function enterSend(event){
+function handleEnter(
+    event
+){
 
     if(
-        event.key === "Enter"
+        event.key ===
+        "Enter"
     ){
 
         event.preventDefault();
@@ -1226,10 +1924,26 @@ function enterSend(event){
 
 
 /* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(
+    text
+){
+
+    statusElement.innerText =
+        text;
+
+}
+
+
+/* =========================================================
    ERROR
 ========================================================= */
 
-function showError(text){
+function showError(
+    text
+){
 
     errorElement.innerText =
         text;
@@ -1237,8 +1951,24 @@ function showError(text){
     errorElement.style.display =
         "block";
 
-    infoElement.innerText =
-        "Error";
+    setStatus(
+        "Error"
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR ERROR
+========================================================= */
+
+function clearError(){
+
+    errorElement.innerText =
+        "";
+
+    errorElement.style.display =
+        "none";
 
 }
 
