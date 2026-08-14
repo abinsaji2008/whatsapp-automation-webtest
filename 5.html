@@ -682,231 +682,105 @@ button:disabled {
 
 <script>
 
-
-/* =========================================================
-   GLOBAL VARIABLES
-========================================================= */
-
-
 let API_URL = "";
-
 let API_KEY = "";
-
 let INSTANCE = "";
-
 let PHONE = "";
-
-
-/*
- * Evolution pagination.
- *
- * Your API response says:
- *
- * total: 11854
- * pages: 238
- * currentPage: 1
- *
- */
 
 const PAGE_SIZE = 50;
 
 let currentPage = 1;
-
 let totalPages = 1;
 
-
-/*
- * Messages that belong to
- * the selected conversation.
- */
+let loading = false;
+let connected = false;
 
 let conversationMessages = [];
 
-
-/*
- * IDs already displayed.
- */
-
 const messageIds = new Set();
 
-
-/*
- * Prevent multiple requests.
- */
-
-let loading = false;
-
-
-/*
- * Connection state.
- */
-
-let connected = false;
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-
 const chat =
-    document.getElementById(
-        "chat"
-    );
-
+    document.getElementById("chat");
 
 const messagesContainer =
-    document.getElementById(
-        "messages"
-    );
-
+    document.getElementById("messages");
 
 const loadingElement =
-    document.getElementById(
-        "loading"
-    );
-
+    document.getElementById("loading");
 
 const errorElement =
-    document.getElementById(
-        "error"
-    );
-
+    document.getElementById("error");
 
 const statusElement =
-    document.getElementById(
-        "status"
-    );
-
+    document.getElementById("status");
 
 const endElement =
-    document.getElementById(
-        "end"
-    );
-
+    document.getElementById("end");
 
 const connectButton =
-    document.getElementById(
-        "connectButton"
-    );
-
+    document.getElementById("connectButton");
 
 const sendButton =
-    document.getElementById(
-        "sendButton"
-    );
+    document.getElementById("sendButton");
 
 
 /* =========================================================
    CONNECT
 ========================================================= */
 
-
 async function connect() {
 
     clearError();
 
-
     API_URL =
         document
-        .getElementById(
-            "apiUrl"
-        )
+        .getElementById("apiUrl")
         .value
         .trim()
-        .replace(
-            /\/$/,
-            ""
-        );
-
+        .replace(/\/$/, "");
 
     API_KEY =
         document
-        .getElementById(
-            "apiKey"
-        )
+        .getElementById("apiKey")
         .value
         .trim();
-
 
     INSTANCE =
         document
-        .getElementById(
-            "instance"
-        )
+        .getElementById("instance")
         .value
         .trim();
 
-
     PHONE =
         document
-        .getElementById(
-            "phone"
-        )
+        .getElementById("phone")
         .value
         .trim()
-        .replace(
-            /\D/g,
-            ""
-        );
-
-
-    /* -----------------------------------------------------
-       VALIDATION
-    ----------------------------------------------------- */
+        .replace(/\D/g, "");
 
 
     if (!API_URL) {
-
-        showError(
-            "Evolution API URL is required."
-        );
-
+        showError("Evolution API URL is required.");
         return;
-
     }
-
 
     if (!API_KEY) {
-
-        showError(
-            "Evolution API Key is required."
-        );
-
+        showError("Evolution API Key is required.");
         return;
-
     }
-
 
     if (!INSTANCE) {
-
-        showError(
-            "Instance name is required."
-        );
-
+        showError("Instance name is required.");
         return;
-
     }
-
 
     if (!PHONE) {
-
-        showError(
-            "Phone number is required."
-        );
-
+        showError("Phone number is required.");
         return;
-
     }
-
-
-    /* -----------------------------------------------------
-       RESET
-    ----------------------------------------------------- */
 
 
     currentPage = 1;
-
     totalPages = 1;
 
     conversationMessages = [];
@@ -919,77 +793,31 @@ async function connect() {
 
     connected = false;
 
+    connectButton.disabled = true;
 
-    document
-        .getElementById(
-            "headerTitle"
-        )
-        .innerText =
+
+    document.getElementById("headerTitle").innerText =
         "+" + PHONE;
 
-
-    document
-        .getElementById(
-            "headerSub"
-        )
-        .innerText =
+    document.getElementById("headerSub").innerText =
         "Connecting...";
-
-
-    connectButton.disabled = true;
 
 
     try {
 
-        setStatus(
-            "Connecting to Evolution API..."
-        );
-
-
-        /*
-         * First request.
-         *
-         * This uses the actual response format
-         * from your server:
-         *
-         * messages.records
-         */
-
-        await loadPage(
-            1,
-            true
-        );
-
+        await loadFirstPage();
 
         connected = true;
 
-
-        document
-            .getElementById(
-                "headerSub"
-            )
-            .innerText =
+        document.getElementById("headerSub").innerText =
             "Connected";
-
-
-        setStatus(
-            "Connected"
-        );
-
 
     }
     catch (error) {
 
-        showError(
-            error.message
-        );
+        showError(error.message);
 
-
-        document
-            .getElementById(
-                "headerSub"
-            )
-            .innerText =
+        document.getElementById("headerSub").innerText =
             "Connection failed";
 
     }
@@ -998,7 +826,6 @@ async function connect() {
         connectButton.disabled = false;
 
     }
-
 }
 
 
@@ -1006,26 +833,19 @@ async function connect() {
    API REQUEST
 ========================================================= */
 
-
 async function apiRequest(
     endpoint,
     method = "GET",
     body = null
 ) {
 
-
     const options = {
 
-        method: method,
+        method,
 
         headers: {
-
-            "Content-Type":
-                "application/json",
-
-            "apikey":
-                API_KEY
-
+            "Content-Type": "application/json",
+            "apikey": API_KEY
         }
 
     };
@@ -1034,27 +854,12 @@ async function apiRequest(
     if (body !== null) {
 
         options.body =
-            JSON.stringify(
-                body
-            );
+            JSON.stringify(body);
 
     }
 
 
-    console.log(
-        "Evolution REQUEST:",
-        API_URL + endpoint
-    );
-
-
-    console.log(
-        "Evolution BODY:",
-        body
-    );
-
-
     let response;
-
 
     try {
 
@@ -1068,17 +873,9 @@ async function apiRequest(
     catch (error) {
 
         throw new Error(
-
             "Failed to fetch Evolution API.\n\n" +
-
             "URL:\n" +
-
-            API_URL + endpoint +
-
-            "\n\n" +
-
-            "This is usually caused by CORS, an incorrect Railway URL, HTTPS/HTTP mismatch, or the server being offline."
-
+            API_URL + endpoint
         );
 
     }
@@ -1088,20 +885,7 @@ async function apiRequest(
         await response.text();
 
 
-    console.log(
-        "Evolution STATUS:",
-        response.status
-    );
-
-
-    console.log(
-        "Evolution RESPONSE:",
-        text
-    );
-
-
     let data;
-
 
     try {
 
@@ -1121,34 +905,86 @@ async function apiRequest(
     if (!response.ok) {
 
         throw new Error(
-
             "Evolution API HTTP " +
-
             response.status +
-
             "\n\n" +
-
             (
-                typeof data ===
-                "string"
-
+                typeof data === "string"
                     ? data
-
                     : JSON.stringify(
                         data,
                         null,
                         2
                     )
-
             )
-
         );
 
     }
 
 
     return data;
+}
 
+
+/* =========================================================
+   LOAD FIRST PAGE
+========================================================= */
+
+async function loadFirstPage() {
+
+    setStatus(
+        "Loading conversation..."
+    );
+
+    await loadPage(
+        1,
+        true
+    );
+
+
+    /*
+     * IMPORTANT:
+     *
+     * If the first page does not contain
+     * enough messages to create a scrollbar,
+     * automatically load more pages.
+     */
+
+    let safety = 0;
+
+    while (
+        chat.scrollHeight <= chat.clientHeight + 100 &&
+        currentPage < totalPages &&
+        safety < 10
+    ) {
+
+        safety++;
+
+        await loadOlderPage(
+            currentPage + 1,
+            false
+        );
+
+    }
+
+
+    /*
+     * Start at the bottom.
+     */
+
+    setTimeout(() => {
+
+        chat.scrollTop =
+            chat.scrollHeight;
+
+    }, 50);
+
+
+    setStatus(
+        "Loaded " +
+        conversationMessages.length +
+        " messages"
+    );
 }
 
 
@@ -1156,25 +992,128 @@ async function apiRequest(
    LOAD PAGE
 ========================================================= */
 
-
 async function loadPage(
     page,
-    firstLoad = false
+    firstPage = false
 ) {
 
-
     if (loading) {
-
         return;
+    }
 
+    if (page > totalPages) {
+        return;
     }
 
 
-    if (
-        page > totalPages
-    ) {
+    loading = true;
 
-        hasReachedBeginning();
+    loadingElement.style.display =
+        "block";
+
+
+    try {
+
+        const data =
+            await apiRequest(
+
+                "/chat/findMessages/" +
+                encodeURIComponent(
+                    INSTANCE
+                ),
+
+                "POST",
+
+                {
+                    page: page,
+                    offset: PAGE_SIZE
+                }
+
+            );
+
+
+        /*
+         * Your actual Evolution response:
+         *
+         * data.messages.records
+         */
+
+        const records =
+            extractRecords(data);
+
+
+        const pagination =
+            getPagination(
+                data,
+                page
+            );
+
+
+        currentPage =
+            pagination.currentPage;
+
+        totalPages =
+            pagination.pages;
+
+
+        /*
+         * Find this phone's messages.
+         */
+
+        const matches =
+            filterConversation(
+                records,
+                PHONE
+            );
+
+
+        addMessages(
+            matches
+        );
+
+
+        renderMessages();
+
+
+        setStatus(
+            "Page " +
+            currentPage +
+            " / " +
+            totalPages +
+            " • " +
+            conversationMessages.length +
+            " messages"
+        );
+
+
+    }
+    finally {
+
+        loading = false;
+
+        loadingElement.style.display =
+            "none";
+
+    }
+}
+
+
+/* =========================================================
+   LOAD OLDER PAGE
+========================================================= */
+
+async function loadOlderPage(
+    page,
+    preserveScroll = true
+) {
+
+    if (loading) {
+        return;
+    }
+
+    if (page > totalPages) {
+
+        showBeginning();
 
         return;
 
@@ -1187,79 +1126,45 @@ async function loadPage(
         "block";
 
 
-    if (firstLoad) {
+    /*
+     * Save current position.
+     */
 
-        setStatus(
-            "Loading messages..."
-        );
+    const oldHeight =
+        chat.scrollHeight;
 
-    }
-    else {
-
-        setStatus(
-            "Loading older messages..."
-        );
-
-    }
+    const oldTop =
+        chat.scrollTop;
 
 
     try {
 
-
-        /*
-         * Evolution API accepts pagination
-         * for findMessages.
-         *
-         * offset = number of records per page
-         * page   = page number
-         */
-
-        const body = {
-
-            page: page,
-
-            offset: PAGE_SIZE
-
-        };
+        setStatus(
+            "Loading older messages..."
+        );
 
 
         const data =
             await apiRequest(
 
                 "/chat/findMessages/" +
-
                 encodeURIComponent(
                     INSTANCE
                 ),
 
                 "POST",
 
-                body
+                {
+                    page: page,
+                    offset: PAGE_SIZE
+                }
 
             );
 
-
-        console.log(
-            "FULL PAGE DATA:",
-            data
-        );
-
-
-        /*
-         * Get records from:
-         *
-         * data.messages.records
-         */
 
         const records =
-            extractRecords(
-                data
-            );
+            extractRecords(data);
 
-
-        /*
-         * Get pagination information.
-         */
 
         const pagination =
             getPagination(
@@ -1268,36 +1173,12 @@ async function loadPage(
             );
 
 
-        totalPages =
-            pagination.pages;
-
-
         currentPage =
             pagination.currentPage;
 
+        totalPages =
+            pagination.pages;
 
-        console.log(
-            "PAGE:",
-            currentPage
-        );
-
-
-        console.log(
-            "TOTAL PAGES:",
-            totalPages
-        );
-
-
-        console.log(
-            "RECORDS:",
-            records.length
-        );
-
-
-        /*
-         * Find messages belonging to
-         * the requested phone number.
-         */
 
         const matches =
             filterConversation(
@@ -1306,154 +1187,9 @@ async function loadPage(
             );
 
 
-        console.log(
-            "MATCHES ON PAGE:",
-            matches.length
-        );
-
-
-        /*
-         * Add matching messages.
-         */
-
-        addConversationMessages(
+        addMessages(
             matches
         );
-
-
-        /*
-         * If this is first load and
-         * no message was found, keep
-         * scanning older pages automatically.
-         */
-
-        if (
-            firstLoad &&
-            matches.length === 0
-        ) {
-
-
-            setStatus(
-
-                "Searching page " +
-                page +
-                " of " +
-                totalPages +
-                "..."
-
-            );
-
-
-            /*
-             * Search pages until the
-             * selected conversation is found.
-             *
-             * Maximum safety limit.
-             */
-
-            let found = false;
-
-
-            for (
-                let p = page + 1;
-
-                p <= totalPages;
-
-                p++
-            ) {
-
-
-                if (
-                    conversationMessages.length > 0
-                ) {
-
-                    found = true;
-
-                    break;
-
-                }
-
-
-                setStatus(
-
-                    "Searching conversation: page " +
-                    p +
-                    " / " +
-                    totalPages
-
-                );
-
-
-                const nextData =
-                    await apiRequest(
-
-                        "/chat/findMessages/" +
-
-                        encodeURIComponent(
-                            INSTANCE
-                        ),
-
-                        "POST",
-
-                        {
-
-                            page: p,
-
-                            offset: PAGE_SIZE
-
-                        }
-
-                    );
-
-
-                const nextRecords =
-                    extractRecords(
-                        nextData
-                    );
-
-
-                const nextMatches =
-                    filterConversation(
-                        nextRecords,
-                        PHONE
-                    );
-
-
-                addConversationMessages(
-                    nextMatches
-                );
-
-
-                currentPage =
-                    p;
-
-
-                if (
-                    nextMatches.length > 0
-                ) {
-
-                    found = true;
-
-                    break;
-
-                }
-
-            }
-
-
-            if (
-                conversationMessages.length === 0
-            ) {
-
-                showNoMessagesFound(
-                    data
-                );
-
-                return;
-
-            }
-
-        }
 
 
         /*
@@ -1467,52 +1203,47 @@ async function loadPage(
         );
 
 
-        /*
-         * Render.
-         */
-
         renderMessages();
 
 
         /*
-         * Scroll behavior.
+         * Preserve exact scroll position.
          */
 
-        if (firstLoad) {
+        if (preserveScroll) {
 
-            setTimeout(
-                () => {
+            const newHeight =
+                chat.scrollHeight;
 
-                    chat.scrollTop =
-                        chat.scrollHeight;
 
-                },
-                50
-            );
+            chat.scrollTop =
+                oldTop +
+                (
+                    newHeight -
+                    oldHeight
+                );
 
         }
 
-
-        /*
-         * If we reached the last API page.
-         */
 
         if (
             currentPage >=
             totalPages
         ) {
 
-            hasReachedBeginning();
+            showBeginning();
 
         }
 
 
         setStatus(
-
-            "Loaded " +
+            "Page " +
+            currentPage +
+            " / " +
+            totalPages +
+            " • " +
             conversationMessages.length +
             " messages"
-
         );
 
 
@@ -1525,7 +1256,6 @@ async function loadPage(
             "none";
 
     }
-
 }
 
 
@@ -1533,40 +1263,20 @@ async function loadPage(
    EXTRACT RECORDS
 ========================================================= */
 
-
-function extractRecords(
-    data
-) {
-
-
-    /*
-     * THIS IS THE IMPORTANT FIX.
-     *
-     * Your response:
-     *
-     * data.messages.records
-     */
+function extractRecords(data) {
 
     if (
-
         data &&
-
         data.messages &&
-
         Array.isArray(
             data.messages.records
         )
-
     ) {
 
         return data.messages.records;
 
     }
 
-
-    /*
-     * Other formats for compatibility.
-     */
 
     if (
         Array.isArray(data)
@@ -1601,46 +1311,18 @@ function extractRecords(
     }
 
 
-    if (
-        data &&
-        Array.isArray(
-            data.data
-        )
-    ) {
-
-        return data.data;
-
-    }
-
-
-    if (
-        data &&
-        data.response &&
-        Array.isArray(
-            data.response
-        )
-    ) {
-
-        return data.response;
-
-    }
-
-
     return [];
-
 }
 
 
 /* =========================================================
-   GET PAGINATION
+   PAGINATION
 ========================================================= */
-
 
 function getPagination(
     data,
     fallbackPage
 ) {
-
 
     if (
         data &&
@@ -1669,34 +1351,27 @@ function getPagination(
 
         pages: 1,
 
-        currentPage:
-            fallbackPage
+        currentPage: fallbackPage
 
     };
-
 }
 
 
 /* =========================================================
-   FILTER CONVERSATION
+   FILTER PHONE
 ========================================================= */
-
 
 function filterConversation(
     records,
     phone
 ) {
 
-
     const target =
-        cleanNumber(
-            phone
-        );
+        cleanNumber(phone);
 
 
     return records.filter(
         msg => {
-
 
             const key =
                 msg?.key || {};
@@ -1714,20 +1389,12 @@ function filterConversation(
                 "";
 
 
-            const participantAlt =
-                key.participantAlt ||
-                msg.participantAlt ||
-                "";
-
-
             /*
-             * NORMAL DIRECT CHAT
-             *
-             * 919605515958@s.whatsapp.net
+             * Direct WhatsApp chat.
              */
 
             if (
-                jidMatchesNumber(
+                jidMatches(
                     remoteJid,
                     target
                 )
@@ -1739,41 +1406,18 @@ function filterConversation(
 
 
             /*
-             * LID DIRECT CHAT
-             *
-             * Example:
-             *
-             * 123456789@lid
-             *
-             * participantAlt:
-             *
-             * 919605515958@s.whatsapp.net
+             * LID direct chat.
              */
 
             if (
                 String(
                     remoteJid
-                ).endsWith(
-                    "@lid"
-                )
+                ).endsWith("@lid")
             ) {
 
-
                 if (
-                    jidMatchesNumber(
+                    jidMatches(
                         remoteJidAlt,
-                        target
-                    )
-                ) {
-
-                    return true;
-
-                }
-
-
-                if (
-                    jidMatchesNumber(
-                        participantAlt,
                         target
                     )
                 ) {
@@ -1785,24 +1429,10 @@ function filterConversation(
             }
 
 
-            /*
-             * DO NOT match participantAlt
-             * for group messages.
-             *
-             * Your uploaded response contains:
-             *
-             * remoteJid = ...@g.us
-             * participantAlt = phone@s.whatsapp.net
-             *
-             * Those are group messages, not
-             * the private chat with that number.
-             */
-
             return false;
 
         }
     );
-
 }
 
 
@@ -1810,17 +1440,13 @@ function filterConversation(
    JID MATCH
 ========================================================= */
 
-
-function jidMatchesNumber(
+function jidMatches(
     jid,
     target
 ) {
 
-
     if (!jid) {
-
         return false;
-
     }
 
 
@@ -1829,13 +1455,12 @@ function jidMatchesNumber(
 
 
     /*
-     * Ignore groups.
+     * Never treat group chats as
+     * private chats.
      */
 
     if (
-        value.endsWith(
-            "@g.us"
-        )
+        value.endsWith("@g.us")
     ) {
 
         return false;
@@ -1843,14 +1468,8 @@ function jidMatchesNumber(
     }
 
 
-    /*
-     * Ignore broadcasts.
-     */
-
     if (
-        value.includes(
-            "status@"
-        )
+        value.includes("status@")
     ) {
 
         return false;
@@ -1859,26 +1478,13 @@ function jidMatchesNumber(
 
 
     const digits =
-        cleanNumber(
-            value
-        );
-
-
-    if (!digits) {
-
-        return false;
-
-    }
+        cleanNumber(value);
 
 
     return (
-
         digits === target ||
-
         digits.endsWith(target)
-
     );
-
 }
 
 
@@ -1886,11 +1492,7 @@ function jidMatchesNumber(
    CLEAN NUMBER
 ========================================================= */
 
-
-function cleanNumber(
-    value
-) {
-
+function cleanNumber(value) {
 
     return String(
         value || ""
@@ -1899,7 +1501,6 @@ function cleanNumber(
         /\D/g,
         ""
     );
-
 }
 
 
@@ -1907,28 +1508,19 @@ function cleanNumber(
    ADD MESSAGES
 ========================================================= */
 
-
-function addConversationMessages(
-    messages
-) {
-
+function addMessages(list) {
 
     for (
         const msg
-        of messages
+        of list
     ) {
 
-
         const id =
-            getMessageId(
-                msg
-            );
+            getMessageId(msg);
 
 
         if (
-            messageIds.has(
-                id
-            )
+            messageIds.has(id)
         ) {
 
             continue;
@@ -1936,10 +1528,7 @@ function addConversationMessages(
         }
 
 
-        messageIds.add(
-            id
-        );
-
+        messageIds.add(id);
 
         conversationMessages.push(
             msg
@@ -1951,20 +1540,14 @@ function addConversationMessages(
 
 
 /* =========================================================
-   RENDER MESSAGES
+   RENDER
 ========================================================= */
 
-
 function renderMessages() {
-
 
     messagesContainer.innerHTML =
         "";
 
-
-    /*
-     * Always sort oldest → newest.
-     */
 
     conversationMessages.sort(
         (a, b) =>
@@ -1978,17 +1561,13 @@ function renderMessages() {
         of conversationMessages
     ) {
 
-
         messagesContainer.appendChild(
-
             createMessageElement(
                 msg
             )
-
         );
 
     }
-
 }
 
 
@@ -1996,11 +1575,7 @@ function renderMessages() {
    CREATE MESSAGE
 ========================================================= */
 
-
-function createMessageElement(
-    msg
-) {
-
+function createMessageElement(msg) {
 
     const fromMe =
         Boolean(
@@ -2016,7 +1591,6 @@ function createMessageElement(
 
     wrapper.className =
         "message " +
-
         (
             fromMe
                 ? "outgoing"
@@ -2034,10 +1608,18 @@ function createMessageElement(
         "bubble";
 
 
-    const content =
-        createMessageContent(
-            msg
+    const text =
+        document.createElement(
+            "div"
         );
+
+
+    text.className =
+        "text";
+
+
+    text.innerText =
+        getMessageText(msg);
 
 
     const time =
@@ -2052,391 +1634,128 @@ function createMessageElement(
 
     time.innerText =
         formatTime(
-            getTimestamp(
-                msg
-            )
+            getTimestamp(msg)
         );
 
 
-    bubble.appendChild(
-        content
-    );
+    bubble.appendChild(text);
 
+    bubble.appendChild(time);
 
-    bubble.appendChild(
-        time
-    );
-
-
-    wrapper.appendChild(
-        bubble
-    );
+    wrapper.appendChild(bubble);
 
 
     return wrapper;
-
 }
 
 
 /* =========================================================
-   CREATE MESSAGE CONTENT
+   MESSAGE TEXT
 ========================================================= */
 
-
-function createMessageContent(
-    msg
-) {
-
-
-    const container =
-        document.createElement(
-            "div"
-        );
-
+function getMessageText(msg) {
 
     const message =
         msg?.message || {};
 
 
-    /*
-     * TEXT
-     */
-
     if (
-        typeof
-        message.conversation ===
+        typeof message.conversation ===
         "string"
     ) {
 
-
-        const text =
-            document.createElement(
-                "div"
-            );
-
-
-        text.className =
-            "text";
-
-
-        text.innerText =
-            message.conversation;
-
-
-        container.appendChild(
-            text
-        );
-
-
-        return container;
+        return message.conversation;
 
     }
 
-
-    /*
-     * EXTENDED TEXT
-     */
 
     if (
         message.extendedTextMessage
     ) {
 
-
-        const text =
-            document.createElement(
-                "div"
-            );
-
-
-        text.className =
-            "text";
-
-
-        text.innerText =
-
+        return (
             message
             .extendedTextMessage
             .text ||
-
-            "";
-
-
-        container.appendChild(
-            text
+            ""
         );
-
-
-        return container;
 
     }
 
-
-    /*
-     * IMAGE
-     */
 
     if (
         message.imageMessage
     ) {
 
-
-        const image =
-            document.createElement(
-                "img"
-            );
-
-
-        image.className =
-            "media";
-
-
-        image.src =
-
-            message
-            .imageMessage
-            .jpegThumbnail
-
-                ? "data:image/jpeg;base64," +
-
-                    message
-                    .imageMessage
-                    .jpegThumbnail
-
-                : "";
-
-
-        image.alt =
-            "Image";
-
-
-        container.appendChild(
-            image
+        return (
+            "📷 " +
+            (
+                message
+                .imageMessage
+                .caption ||
+                "Image"
+            )
         );
-
-
-        const caption =
-
-            message
-            .imageMessage
-            .caption;
-
-
-        if (caption) {
-
-            const c =
-                document.createElement(
-                    "div"
-                );
-
-
-            c.className =
-                "caption";
-
-
-            c.innerText =
-                caption;
-
-
-            container.appendChild(
-                c
-            );
-
-        }
-
-
-        return container;
 
     }
 
-
-    /*
-     * VIDEO
-     */
 
     if (
         message.videoMessage
     ) {
 
-
-        const text =
-            document.createElement(
-                "div"
-            );
-
-
-        text.className =
-            "text";
-
-
-        text.innerText =
-            "🎥 Video";
-
-
-        const caption =
-
-            message
-            .videoMessage
-            .caption;
-
-
-        if (caption) {
-
-            text.innerText +=
-                "\n" +
-                caption;
-
-        }
-
-
-        container.appendChild(
-            text
+        return (
+            "🎥 " +
+            (
+                message
+                .videoMessage
+                .caption ||
+                "Video"
+            )
         );
-
-
-        return container;
 
     }
 
-
-    /*
-     * AUDIO
-     */
 
     if (
         message.audioMessage
     ) {
 
-
-        const text =
-            document.createElement(
-                "div"
-            );
-
-
-        text.className =
-            "text";
-
-
-        text.innerText =
-            "🎵 Audio";
-
-
-        container.appendChild(
-            text
-        );
-
-
-        return container;
+        return "🎵 Audio";
 
     }
 
-
-    /*
-     * DOCUMENT
-     */
 
     if (
         message.documentMessage
     ) {
 
-
-        const text =
-            document.createElement(
-                "div"
-            );
-
-
-        text.className =
-            "text";
-
-
-        text.innerText =
-
+        return (
             "📄 " +
-
             (
                 message
                 .documentMessage
                 .fileName ||
-
                 "Document"
-            );
-
-
-        container.appendChild(
-            text
+            )
         );
-
-
-        return container;
 
     }
 
-
-    /*
-     * STICKER
-     */
 
     if (
         message.stickerMessage
     ) {
 
-
-        const text =
-            document.createElement(
-                "div"
-            );
-
-
-        text.className =
-            "text";
-
-
-        text.innerText =
-            "🖼️ Sticker";
-
-
-        container.appendChild(
-            text
-        );
-
-
-        return container;
+        return "🖼️ Sticker";
 
     }
 
 
-    /*
-     * UNKNOWN MESSAGE
-     */
-
-    const text =
-        document.createElement(
-            "div"
-        );
-
-
-    text.className =
-        "text";
-
-
-    text.innerText =
-
-        "📩 " +
-
-        (
-            msg.messageType ||
-            "Message"
-        );
-
-
-    container.appendChild(
-        text
+    return (
+        msg.messageType ||
+        "Message"
     );
-
-
-    return container;
-
 }
 
 
@@ -2444,27 +1763,16 @@ function createMessageContent(
    MESSAGE ID
 ========================================================= */
 
-
-function getMessageId(
-    msg
-) {
-
+function getMessageId(msg) {
 
     return (
-
         msg?.key?.id ||
-
         msg?.id ||
-
         (
-            "unknown-" +
-            getTimestamp(msg) +
-            "-" +
+            "generated-" +
             Math.random()
         )
-
     );
-
 }
 
 
@@ -2472,60 +1780,41 @@ function getMessageId(
    TIMESTAMP
 ========================================================= */
 
+function getTimestamp(msg) {
 
-function getTimestamp(
-    msg
-) {
-
-
-    let timestamp =
-
+    let t =
         msg?.messageTimestamp ||
-
         msg?.timestamp ||
-
         0;
 
 
     if (
-        typeof timestamp ===
-        "object"
+        typeof t === "object"
     ) {
 
-
-        timestamp =
-
-            timestamp.low ||
-
-            timestamp.seconds ||
-
+        t =
+            t.low ||
+            t.seconds ||
             0;
 
     }
 
 
-    timestamp =
-        Number(
-            timestamp
-        );
+    t =
+        Number(t);
 
-
-    /*
-     * Seconds → milliseconds
-     */
 
     if (
-        timestamp > 0 &&
-        timestamp < 100000000000
+        t > 0 &&
+        t < 100000000000
     ) {
 
-        timestamp *= 1000;
+        t *= 1000;
 
     }
 
 
-    return timestamp || 0;
-
+    return t;
 }
 
 
@@ -2533,92 +1822,61 @@ function getTimestamp(
    TIME
 ========================================================= */
 
-
-function formatTime(
-    timestamp
-) {
-
+function formatTime(timestamp) {
 
     if (!timestamp) {
-
         return "";
-
     }
 
 
-    const date =
-        new Date(
-            timestamp
-        );
-
-
-    return date.toLocaleString(
+    return new Date(
+        timestamp
+    ).toLocaleTimeString(
         [],
         {
-
-            day: "2-digit",
-
-            month: "2-digit",
-
             hour: "2-digit",
-
             minute: "2-digit"
-
         }
     );
-
 }
 
 
 /* =========================================================
-   SCROLL UP
+   THE IMPORTANT SCROLL HANDLER
 ========================================================= */
-
 
 chat.addEventListener(
     "scroll",
-    async function () {
-
+    async () => {
 
         /*
-         * When user reaches the top,
-         * load the next Evolution page.
+         * User reached the TOP.
+         *
+         * Load older messages.
          */
 
         if (
-            chat.scrollTop <= 100 &&
+            chat.scrollTop <= 80 &&
             !loading &&
             currentPage < totalPages
         ) {
 
-
-            /*
-             * Save current height.
-             *
-             * This lets us keep the user's
-             * position after adding older
-             * messages.
-             */
-
             const oldHeight =
                 chat.scrollHeight;
-
 
             const oldTop =
                 chat.scrollTop;
 
 
-            const nextPage =
-                currentPage + 1;
-
-
             await loadOlderPage(
-                nextPage
+                currentPage + 1,
+                false
             );
 
 
             /*
-             * Keep scroll position.
+             * Restore position after
+             * adding messages.
              */
 
             const newHeight =
@@ -2626,9 +1884,7 @@ chat.addEventListener(
 
 
             chat.scrollTop =
-
                 oldTop +
-
                 (
                     newHeight -
                     oldHeight
@@ -2641,273 +1897,107 @@ chat.addEventListener(
 
 
 /* =========================================================
-   LOAD OLDER PAGE
+   ALSO SUPPORT MOUSE WHEEL
 ========================================================= */
 
+chat.addEventListener(
+    "wheel",
+    async (event) => {
 
-async function loadOlderPage(
-    page
-) {
+        /*
+         * If the user is scrolling upward
+         * and is already near the top,
+         * load another page.
+         */
 
+        if (
+            event.deltaY < 0 &&
+            chat.scrollTop <= 80 &&
+            !loading &&
+            currentPage < totalPages
+        ) {
 
-    if (
-        loading ||
-        page > totalPages
-    ) {
+            await loadOlderPage(
+                currentPage + 1,
+                true
+            );
 
-        return;
+        }
 
     }
+);
 
 
-    loading = true;
+/* =========================================================
+   TOUCH / MOBILE
+========================================================= */
 
-    loadingElement.style.display =
-        "block";
-
-
-    try {
+let touchStartY = 0;
 
 
-        setStatus(
+chat.addEventListener(
+    "touchstart",
+    event => {
 
-            "Loading older messages... " +
+        if (
+            event.touches.length
+        ) {
 
-            page +
+            touchStartY =
+                event.touches[0].clientY;
 
-            " / " +
+        }
 
-            totalPages
-
-        );
-
-
-        const data =
-            await apiRequest(
-
-                "/chat/findMessages/" +
-
-                encodeURIComponent(
-                    INSTANCE
-                ),
-
-                "POST",
-
-                {
-
-                    page: page,
-
-                    offset: PAGE_SIZE
-
-                }
-
-            );
+    }
+);
 
 
-        const records =
-            extractRecords(
-                data
-            );
+chat.addEventListener(
+    "touchmove",
+    async event => {
+
+        if (
+            !event.touches.length
+        ) {
+
+            return;
+
+        }
 
 
-        const matches =
-            filterConversation(
-                records,
-                PHONE
-            );
-
-
-        addConversationMessages(
-            matches
-        );
-
-
-        currentPage =
-            page;
+        const currentY =
+            event.touches[0].clientY;
 
 
         /*
-         * Sort and render.
+         * Finger moving down while
+         * already at the top =
+         * user wants older messages.
          */
 
-        conversationMessages.sort(
-            (a, b) =>
-                getTimestamp(a) -
-                getTimestamp(b)
-        );
-
-
-        renderMessages();
-
-
         if (
-            currentPage >=
-            totalPages
+            currentY > touchStartY &&
+            chat.scrollTop <= 80 &&
+            !loading &&
+            currentPage < totalPages
         ) {
 
-            hasReachedBeginning();
-
-        }
-
-
-        setStatus(
-
-            "Loaded " +
-
-            conversationMessages.length +
-
-            " messages"
-
-        );
-
-
-    }
-    catch (error) {
-
-
-        showError(
-            "Failed to load older messages.\n\n" +
-            error.message
-        );
-
-
-    }
-    finally {
-
-        loading = false;
-
-        loadingElement.style.display =
-            "none";
-
-    }
-
-}
-
-
-/* =========================================================
-   BEGINNING
-========================================================= */
-
-
-function hasReachedBeginning() {
-
-
-    endElement.innerText =
-        "Beginning of conversation";
-
-}
-
-
-/* =========================================================
-   NO MESSAGES
-========================================================= */
-
-
-function showNoMessagesFound(
-    data
-) {
-
-
-    setStatus(
-        "No messages found for +" +
-        PHONE
-    );
-
-
-    endElement.innerText =
-        "No messages found for +" +
-        PHONE;
-
-
-    /*
-     * Show useful debugging information.
-     */
-
-    const firstRecords =
-        extractRecords(
-            data
-        );
-
-
-    const jids =
-        [];
-
-
-    for (
-        const msg
-        of firstRecords
-    ) {
-
-
-        const key =
-            msg?.key || {};
-
-
-        const values = [
-
-            key.remoteJid,
-
-            key.remoteJidAlt,
-
-            key.participant,
-
-            key.participantAlt
-
-        ];
-
-
-        for (
-            const value
-            of values
-        ) {
-
-
-            if (
-                value &&
-                !jids.includes(
-                    value
-                )
-            ) {
-
-                jids.push(
-                    value
-                );
-
-            }
+            await loadOlderPage(
+                currentPage + 1,
+                true
+            );
 
         }
 
     }
-
-
-    showError(
-
-        "No messages found for +" +
-
-        PHONE +
-
-        ".\n\n" +
-
-        "The API itself is returning messages.\n\n" +
-
-        "Some JIDs from the API:\n\n" +
-
-        jids
-            .slice(0, 30)
-            .join("\n")
-
-    );
-
-}
+);
 
 
 /* =========================================================
    SEND MESSAGE
 ========================================================= */
 
-
 async function sendMessage() {
-
 
     const input =
         document.getElementById(
@@ -2920,16 +2010,14 @@ async function sendMessage() {
 
 
     if (!text) {
-
         return;
-
     }
 
 
     if (!connected) {
 
         showError(
-            "Connect to Evolution API first."
+            "Connect first."
         );
 
         return;
@@ -2937,30 +2025,15 @@ async function sendMessage() {
     }
 
 
-    sendButton.disabled =
-        true;
-
-
-    clearError();
+    sendButton.disabled = true;
 
 
     try {
-
-
-        setStatus(
-            "Sending message..."
-        );
-
-
-        /*
-         * Evolution sendText endpoint.
-         */
 
         const data =
             await apiRequest(
 
                 "/message/sendText/" +
-
                 encodeURIComponent(
                     INSTANCE
                 ),
@@ -2968,31 +2041,18 @@ async function sendMessage() {
                 "POST",
 
                 {
-
-                    number:
-                        PHONE,
-
-                    text:
-                        text
-
+                    number: PHONE,
+                    text: text
                 }
 
             );
 
 
-        console.log(
-            "SEND RESULT:",
-            data
-        );
-
-
-        input.value =
-            "";
+        input.value = "";
 
 
         /*
-         * Add local outgoing message
-         * immediately.
+         * Show immediately.
          */
 
         const localMessage = {
@@ -3000,24 +2060,15 @@ async function sendMessage() {
             key: {
 
                 id:
-
                     data?.key?.id ||
-
-                    (
-                        "local-" +
-                        Date.now()
-                    ),
+                    "local-" +
+                    Date.now(),
 
                 fromMe: true,
 
                 remoteJid:
-
-                    data?.key?.remoteJid ||
-
-                    (
-                        PHONE +
-                        "@s.whatsapp.net"
-                    )
+                    PHONE +
+                    "@s.whatsapp.net"
 
             },
 
@@ -3029,35 +2080,20 @@ async function sendMessage() {
             },
 
             messageTimestamp:
-
                 Math.floor(
-                    Date.now() /
-                    1000
+                    Date.now() / 1000
                 )
 
         };
 
 
-        addConversationMessages(
-            [
-                localMessage
-            ]
-        );
-
-
-        conversationMessages.sort(
-            (a, b) =>
-                getTimestamp(a) -
-                getTimestamp(b)
+        addMessages(
+            [localMessage]
         );
 
 
         renderMessages();
 
-
-        /*
-         * Scroll to bottom.
-         */
 
         setTimeout(
             () => {
@@ -3074,24 +2110,18 @@ async function sendMessage() {
             "Message sent"
         );
 
-
     }
     catch (error) {
 
-
         showError(
-
             "SEND FAILED\n\n" +
-
             error.message
-
         );
 
     }
     finally {
 
-        sendButton.disabled =
-            false;
+        sendButton.disabled = false;
 
     }
 
@@ -3099,32 +2129,17 @@ async function sendMessage() {
 
 
 /* =========================================================
-   ENTER TO SEND
+   ENTER
 ========================================================= */
 
-
-function handleEnter(
-    event
-) {
-
+function handleEnter(event) {
 
     if (
-        event.key ===
-        "Enter"
+        event.key === "Enter" &&
+        !event.shiftKey
     ) {
 
-
-        if (
-            event.shiftKey
-        ) {
-
-            return;
-
-        }
-
-
         event.preventDefault();
-
 
         sendMessage();
 
@@ -3137,11 +2152,7 @@ function handleEnter(
    STATUS
 ========================================================= */
 
-
-function setStatus(
-    text
-) {
-
+function setStatus(text) {
 
     statusElement.innerText =
         text;
@@ -3153,19 +2164,13 @@ function setStatus(
    ERROR
 ========================================================= */
 
-
-function showError(
-    text
-) {
-
+function showError(text) {
 
     errorElement.innerText =
         text;
 
-
     errorElement.style.display =
         "block";
-
 
     setStatus(
         "Error"
@@ -3178,31 +2183,17 @@ function showError(
    CLEAR ERROR
 ========================================================= */
 
-
 function clearError() {
-
 
     errorElement.innerText =
         "";
-
 
     errorElement.style.display =
         "none";
 
 }
 
-
-/* =========================================================
-   START
-========================================================= */
-
-
-console.log(
-    "Evolution WhatsApp Chat loaded."
-);
-
 </script>
-
 </body>
 
 </html>
