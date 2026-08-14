@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>WhatsApp Chat</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #111;
+    color: white;
+    margin: 0;
+    padding: 30px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #222;
+    color: white;
+}
+
+button {
+    background: #25D366;
+    border: 0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.chat {
+    background: #1b1b1b;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 12px;
+}
+
+.message {
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.incoming {
+    background: #333;
+}
+
+.outgoing {
+    background: #075E54;
+    margin-left: auto;
+}
+
+.time {
+    font-size: 11px;
+    opacity: .6;
+}
+</style>
+</head>
+
+<body>
+
+    <a href="index.html">Home Page</a>
+
+<div class="container">
+
+<h2>WhatsApp Chat</h2>
+
+<input id="apiUrl" placeholder="Evolution API URL">
+<input id="instance" placeholder="Instance name">
+<input id="apiKey" placeholder="API Key" type="password">
+
+<input id="number" placeholder="919876543210">
+
+<button onclick="loadMessages()">
+    Load Previous 5 Messages
+</button>
+
+<div id="chat" class="chat">
+    No messages loaded
+</div>
+
+<input id="reply" placeholder="Type your reply...">
+
+<button onclick="sendReply()">
+    Send Reply
+</button>
+
+</div>
+
+<script>
+
+async function loadMessages() {
+
+    const apiUrl =
+        document.getElementById("apiUrl").value.replace(/\/$/, "");
+
+    const instance =
+        document.getElementById("instance").value.trim();
+
+    const apiKey =
+        document.getElementById("apiKey").value.trim();
+
+    const number =
+        document.getElementById("number").value
+        .replace(/\D/g, "");
+
+    const chat =
+        document.getElementById("chat");
+
+    chat.innerHTML = "Finding conversation...";
+
+    try {
+
+        // 1. Find chats
+        const chatsResponse = await fetch(
+            `${apiUrl}/chat/findChats/${encodeURIComponent(instance)}`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "apikey": apiKey
+                },
+
+                body: JSON.stringify({
+                    where: {},
+                    take: 100,
+                    skip: 0,
+                    orderBy: {}
+                })
+            }
+        );
+
+        const chatsData = await chatsResponse.json();
+
+        console.log("CHATS:", chatsData);
+
+        let chats = Array.isArray(chatsData)
+            ? chatsData
+            : chatsData.response || [];
+
+        // Find chat using phone number
+        const foundChat = chats.find(c => {
+
+            const jid =
+                c.remoteJid ||
+                c.id ||
+                c.key?.remoteJid ||
+                "";
+
+            return jid.includes(number);
+
+        });
+
+        if (!foundChat) {
+
+            chat.innerHTML =
+                "❌ Conversation not found.<br><br>" +
+                "Check the browser console (F12) and look at CHATS.";
+
+            return;
+        }
+
+        const remoteJid =
+            foundChat.remoteJid ||
+            foundChat.id ||
+            foundChat.key?.remoteJid;
+
+        console.log("FOUND CHAT:", foundChat);
+        console.log("REMOTE JID:", remoteJid);
+
+        chat.innerHTML =
+            "Conversation found: " +
+            remoteJid +
+            "<br>Loading messages...";
+
+        // 2. Find messages for that exact JID
+        const messagesResponse = await fetch(
+            `${apiUrl}/chat/findMessages/${encodeURIComponent(instance)}`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "apikey": apiKey
+                },
+
+                body: JSON.stringify({
+
+                    where: {
+                        key: {
+                            remoteJid: remoteJid
+                        }
+                    },
+
+                    page: 1,
+                    offset: 5
+                })
+            }
+        );
+
+        const messagesData =
+            await messagesResponse.json();
+
+        console.log("MESSAGES:", messagesData);
+
+        let messages = [];
+
+        if (Array.isArray(messagesData)) {
+            messages = messagesData;
+        }
+
+        else if (
+            messagesData.response?.messages?.records
+        ) {
+            messages =
+                messagesData.response.messages.records;
+        }
+
+        else if (
+            messagesData.messages?.records
+        ) {
+            messages =
+                messagesData.messages.records;
+        }
+
+        if (!messages.length) {
+
+            chat.innerHTML =
+                "❌ Chat found, but no messages were returned.";
+
+            return;
+        }
+
+        // Oldest → newest
+        messages.sort((a, b) =>
+            Number(a.messageTimestamp || 0) -
+            Number(b.messageTimestamp || 0)
+        );
+
+        chat.innerHTML = "";
+
+        messages.slice(-5).forEach(msg => {
+
+            let text = "";
+
+            if (msg.message?.conversation) {
+
+                text =
+                    msg.message.conversation;
+
+            }
+
+            else if (
+                msg.message?.extendedTextMessage?.text
+            ) {
+
+                text =
+                    msg.message.extendedTextMessage.text;
+
+            }
+
+            else if (
+                msg.message?.imageMessage?.caption
+            ) {
+
+                text =
+                    "📷 " +
+                    msg.message.imageMessage.caption;
+
+            }
+
+            else if (msg.message?.imageMessage) {
+
+                text = "📷 Image";
+
+            }
+
+            else if (msg.message?.audioMessage) {
+
+                text = "🎵 Audio";
+
+            }
+
+            else if (msg.message?.videoMessage) {
+
+                text = "🎥 Video";
+
+            }
+
+            else {
+
+                text = "📎 Media";
+
+            }
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "message " +
+                (msg.key?.fromMe
+                    ? "outgoing"
+                    : "incoming");
+
+            div.innerHTML = `
+                ${escapeHtml(text)}
+                <div class="time">
+                    ${msg.key?.fromMe ? "You" : "Them"}
+                </div>
+            `;
+
+            chat.appendChild(div);
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        chat.innerHTML =
+            "❌ Error: " +
+            escapeHtml(error.message);
+    }
+}
+
+async function sendReply() {
+
+    const apiUrl =
+        document.getElementById("apiUrl").value.replace(/\/$/, "");
+
+    const instance =
+        document.getElementById("instance").value;
+
+    const apiKey =
+        document.getElementById("apiKey").value;
+
+    const number =
+        document.getElementById("number").value;
+
+    const text =
+        document.getElementById("reply").value.trim();
+
+    if (!text) {
+        alert("Enter a message");
+        return;
+    }
+
+    try {
+
+        const url =
+            `${apiUrl}/message/sendText/${encodeURIComponent(instance)}`;
+
+        const response = await fetch(url, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": apiKey
+            },
+
+            body: JSON.stringify({
+
+                number: number,
+
+                text: text
+
+            })
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+
+        if (!response.ok) {
+
+            alert(
+                "❌ Failed:\n" +
+                JSON.stringify(data, null, 2)
+            );
+
+            return;
+        }
+
+        document.getElementById("reply").value = "";
+
+        /*
+         * Reload conversation
+         */
+        loadMessages();
+
+    }
+
+    catch (error) {
+
+        alert(
+            "❌ Error: " +
+            error.message
+        );
+
+    }
+}
+
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+</script>
+
+</body>
+</html>
