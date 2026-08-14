@@ -1,14 +1,116 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main page</title>
+    <title>My Websites</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #pages {
+            display: grid;
+            gap: 12px;
+        }
+
+        a {
+            display: block;
+            padding: 15px 20px;
+            background: white;
+            color: #222;
+            text-decoration: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0001;
+            transition: 0.2s;
+        }
+
+        a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px #0002;
+        }
+
+        #loading {
+            color: #777;
+        }
+
+        #error {
+            color: red;
+        }
+    </style>
 </head>
+
 <body>
-    <a href="1.html">page1</a><br>
-    <a href="2.html">page2</a><br>
-    <a href="3.html">page3</a><br>
-    <a href="4.html">page4</a><br>
+
+    <h1>My Websites</h1>
+
+    <div id="loading">Loading pages...</div>
+    <div id="pages"></div>
+    <div id="error"></div>
+
+    <script>
+        // CHANGE THESE
+        const username = "abinsaji2008";
+        const repository = "whatsapp-automation-webtest";
+        const branch = "main";
+
+        const apiURL =
+            `https://api.github.com/repos/${username}/${repository}/contents/?ref=${branch}`;
+
+        async function loadPages() {
+            try {
+                const response = await fetch(apiURL);
+
+                if (!response.ok) {
+                    throw new Error("GitHub repository not found");
+                }
+
+                const files = await response.json();
+
+                const pages = document.getElementById("pages");
+                const loading = document.getElementById("loading");
+
+                loading.style.display = "none";
+
+                files
+                    .filter(file =>
+                        file.type === "file" &&
+                        file.name.endsWith(".html") &&
+                        file.name.toLowerCase() !== "index.html"
+                    )
+                    .sort((a, b) =>
+                        a.name.localeCompare(b.name, undefined, {
+                            numeric: true
+                        })
+                    )
+                    .forEach(file => {
+
+                        const link = document.createElement("a");
+
+                        link.href = file.name;
+                        link.textContent =
+                            file.name.replace(".html", "");
+
+                        pages.appendChild(link);
+                    });
+
+            } catch (error) {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("error").textContent =
+                    "Error: " + error.message;
+            }
+        }
+
+        loadPages();
+    </script>
+
 </body>
 </html>
