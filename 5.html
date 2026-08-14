@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
 <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Evolution WhatsApp Chat</title>
-
 
 <style>
 
@@ -25,21 +21,16 @@
 
 html,
 body {
-
     width: 100%;
     height: 100%;
-
     margin: 0;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+    font-family: Arial, Helvetica, sans-serif;
     background: #111b21;
-
     color: #e9edef;
+}
 
+body {
+    overflow: hidden;
 }
 
 
@@ -48,13 +39,11 @@ body {
 ========================================================= */
 
 .app {
-
     width: 100%;
     height: 100vh;
 
     display: flex;
     flex-direction: column;
-
 }
 
 
@@ -63,27 +52,24 @@ body {
 ========================================================= */
 
 .header {
-
     height: 64px;
+    flex-shrink: 0;
 
     display: flex;
     align-items: center;
 
     padding: 8px 15px;
 
-    background: #202c33;
-
     gap: 12px;
 
-    flex-shrink: 0;
-
+    background: #202c33;
 }
 
-
 .avatar {
-
     width: 45px;
     height: 45px;
+
+    flex-shrink: 0;
 
     border-radius: 50%;
 
@@ -96,42 +82,28 @@ body {
     color: white;
 
     font-weight: bold;
-
 }
-
 
 .headerInfo {
-
-    flex: 1;
-
     min-width: 0;
-
+    flex: 1;
 }
-
 
 .headerTitle {
-
     font-size: 17px;
-
     font-weight: bold;
 
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
     white-space: nowrap;
-
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-
 .headerSub {
-
     margin-top: 3px;
 
     font-size: 12px;
 
     color: #8696a0;
-
 }
 
 
@@ -140,6 +112,7 @@ body {
 ========================================================= */
 
 .settings {
+    flex-shrink: 0;
 
     background: #182229;
 
@@ -155,14 +128,9 @@ body {
         100px;
 
     gap: 7px;
-
-    flex-shrink: 0;
-
 }
 
-
 .settings input {
-
     width: 100%;
 
     padding: 10px;
@@ -176,19 +144,13 @@ body {
     background: #2a3942;
 
     color: white;
-
 }
-
 
 .settings input:focus {
-
     border-color: #00a884;
-
 }
 
-
 button {
-
     border: 0;
 
     border-radius: 6px;
@@ -202,23 +164,15 @@ button {
     cursor: pointer;
 
     font-weight: bold;
-
 }
-
 
 button:hover {
-
     background: #008f72;
-
 }
 
-
 button:disabled {
-
     opacity: 0.5;
-
     cursor: not-allowed;
-
 }
 
 
@@ -227,6 +181,7 @@ button:disabled {
 ========================================================= */
 
 .status {
+    flex-shrink: 0;
 
     background: #182229;
 
@@ -235,9 +190,6 @@ button:disabled {
     color: #aebac1;
 
     font-size: 12px;
-
-    flex-shrink: 0;
-
 }
 
 
@@ -246,8 +198,9 @@ button:disabled {
 ========================================================= */
 
 .error {
-
     display: none;
+
+    flex-shrink: 0;
 
     margin: 8px;
 
@@ -268,9 +221,6 @@ button:disabled {
     max-height: 180px;
 
     overflow: auto;
-
-    flex-shrink: 0;
-
 }
 
 
@@ -279,18 +229,21 @@ button:disabled {
 ========================================================= */
 
 .chat {
-
     flex: 1;
 
     min-height: 0;
 
+    width: 100%;
+
     overflow-y: auto;
+
+    overflow-x: hidden;
 
     padding: 15px;
 
-    background:
-        #0b141a;
+    background: #0b141a;
 
+    scroll-behavior: auto;
 }
 
 
@@ -299,7 +252,6 @@ button:disabled {
 ========================================================= */
 
 .loading {
-
     display: none;
 
     text-align: center;
@@ -309,7 +261,6 @@ button:disabled {
     color: #8696a0;
 
     font-size: 13px;
-
 }
 
 
@@ -318,7 +269,6 @@ button:disabled {
 ========================================================= */
 
 .end {
-
     text-align: center;
 
     padding: 15px;
@@ -326,7 +276,6 @@ button:disabled {
     color: #667781;
 
     font-size: 12px;
-
 }
 
 
@@ -335,30 +284,22 @@ button:disabled {
 ========================================================= */
 
 .message {
-
     display: flex;
 
+    width: 100%;
+
     margin: 4px 0;
-
 }
-
 
 .message.incoming {
-
     justify-content: flex-start;
-
 }
-
 
 .message.outgoing {
-
     justify-content: flex-end;
-
 }
 
-
 .bubble {
-
     max-width: 70%;
 
     padding: 8px 10px;
@@ -366,37 +307,25 @@ button:disabled {
     border-radius: 8px;
 
     word-break: break-word;
-
 }
-
 
 .incoming .bubble {
-
     background: #202c33;
-
 }
-
 
 .outgoing .bubble {
-
     background: #005c4b;
-
 }
 
-
 .text {
-
     white-space: pre-wrap;
 
     font-size: 15px;
 
     line-height: 1.4;
-
 }
 
-
 .time {
-
     margin-top: 4px;
 
     text-align: right;
@@ -404,7 +333,6 @@ button:disabled {
     font-size: 10px;
 
     color: #aebac1;
-
 }
 
 
@@ -413,30 +341,22 @@ button:disabled {
 ========================================================= */
 
 .media {
+    display: block;
 
     max-width: 300px;
 
+    max-height: 300px;
+
     border-radius: 8px;
-
-    display: block;
-
-}
-
-
-.caption {
-
-    margin-top: 5px;
-
-    white-space: pre-wrap;
-
 }
 
 
 /* =========================================================
-   INPUT
+   BOTTOM
 ========================================================= */
 
 .bottom {
+    flex-shrink: 0;
 
     display: flex;
 
@@ -445,14 +365,9 @@ button:disabled {
     padding: 10px;
 
     background: #202c33;
-
-    flex-shrink: 0;
-
 }
 
-
 .bottom input {
-
     flex: 1;
 
     min-width: 0;
@@ -468,14 +383,10 @@ button:disabled {
     background: #2a3942;
 
     color: white;
-
 }
 
-
 .send {
-
     width: 80px;
-
 }
 
 
@@ -486,27 +397,18 @@ button:disabled {
 @media(max-width: 800px) {
 
     .settings {
-
         grid-template-columns:
             1fr
             1fr;
-
     }
-
 
     .settings button {
-
         grid-column: span 2;
-
     }
-
 
     .bubble {
-
         max-width: 85%;
-
     }
-
 }
 
 </style>
@@ -530,7 +432,6 @@ button:disabled {
         WA
     </div>
 
-
     <div class="headerInfo">
 
         <div
@@ -539,7 +440,6 @@ button:disabled {
         >
             WhatsApp Chat
         </div>
-
 
         <div
             id="headerSub"
@@ -559,33 +459,28 @@ button:disabled {
 
 <div class="settings">
 
-
     <input
         id="apiUrl"
         placeholder="Evolution API URL"
         value="https://YOUR-RAILWAY-APP.up.railway.app"
     >
 
-
     <input
         id="instance"
         placeholder="Instance name"
     >
 
-
     <input
         id="phone"
         placeholder="Phone number"
-        value="919605515958"
+        value="918086999662"
     >
-
 
     <input
         id="apiKey"
         type="password"
         placeholder="Evolution API Key"
     >
-
 
     <button
         id="connectButton"
@@ -628,7 +523,6 @@ button:disabled {
     class="chat"
 >
 
-
     <div
         id="loading"
         class="loading"
@@ -636,17 +530,14 @@ button:disabled {
         Loading...
     </div>
 
-
     <div
         id="messages"
     ></div>
-
 
     <div
         id="end"
         class="end"
     ></div>
-
 
 </div>
 
@@ -657,13 +548,11 @@ button:disabled {
 
 <div class="bottom">
 
-
     <input
         id="messageInput"
         placeholder="Type a message..."
         onkeydown="handleEnter(event)"
     >
-
 
     <button
         id="sendButton"
@@ -679,49 +568,108 @@ button:disabled {
 </div>
 
 
-
 <script>
 
+/* =========================================================
+   VARIABLES
+========================================================= */
+
 let API_URL = "";
+
 let API_KEY = "";
+
 let INSTANCE = "";
+
 let PHONE = "";
+
+
+/*
+ * Your API response contains:
+ *
+ * messages.total
+ * messages.pages
+ * messages.currentPage
+ * messages.records
+ */
 
 const PAGE_SIZE = 50;
 
-let currentPage = 1;
+
+let currentPage = 0;
+
 let totalPages = 1;
 
+
 let loading = false;
+
 let connected = false;
+
+
+/*
+ * All matching conversation messages.
+ */
 
 let conversationMessages = [];
 
+
+/*
+ * Prevent duplicate messages.
+ */
+
 const messageIds = new Set();
 
+
+/*
+ * Used to prevent multiple
+ * automatic initial loads.
+ */
+
+let initialLoading = false;
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
 const chat =
-    document.getElementById("chat");
+    document.getElementById(
+        "chat"
+    );
 
 const messagesContainer =
-    document.getElementById("messages");
+    document.getElementById(
+        "messages"
+    );
 
 const loadingElement =
-    document.getElementById("loading");
+    document.getElementById(
+        "loading"
+    );
 
 const errorElement =
-    document.getElementById("error");
+    document.getElementById(
+        "error"
+    );
 
 const statusElement =
-    document.getElementById("status");
+    document.getElementById(
+        "status"
+    );
 
 const endElement =
-    document.getElementById("end");
+    document.getElementById(
+        "end"
+    );
 
 const connectButton =
-    document.getElementById("connectButton");
+    document.getElementById(
+        "connectButton"
+    );
 
 const sendButton =
-    document.getElementById("sendButton");
+    document.getElementById(
+        "sendButton"
+    );
 
 
 /* =========================================================
@@ -732,60 +680,110 @@ async function connect() {
 
     clearError();
 
+
     API_URL =
         document
-        .getElementById("apiUrl")
+        .getElementById(
+            "apiUrl"
+        )
         .value
         .trim()
-        .replace(/\/$/, "");
+        .replace(
+            /\/$/,
+            ""
+        );
+
 
     API_KEY =
         document
-        .getElementById("apiKey")
+        .getElementById(
+            "apiKey"
+        )
         .value
         .trim();
+
 
     INSTANCE =
         document
-        .getElementById("instance")
+        .getElementById(
+            "instance"
+        )
         .value
         .trim();
 
+
     PHONE =
         document
-        .getElementById("phone")
+        .getElementById(
+            "phone"
+        )
         .value
         .trim()
-        .replace(/\D/g, "");
+        .replace(
+            /\D/g,
+            ""
+        );
 
+
+    /* -----------------------------------------------------
+       VALIDATION
+    ----------------------------------------------------- */
 
     if (!API_URL) {
-        showError("Evolution API URL is required.");
+
+        showError(
+            "Evolution API URL is required."
+        );
+
         return;
+
     }
+
 
     if (!API_KEY) {
-        showError("Evolution API Key is required.");
+
+        showError(
+            "Evolution API Key is required."
+        );
+
         return;
+
     }
+
 
     if (!INSTANCE) {
-        showError("Instance name is required.");
+
+        showError(
+            "Instance name is required."
+        );
+
         return;
+
     }
+
 
     if (!PHONE) {
-        showError("Phone number is required.");
+
+        showError(
+            "Phone number is required."
+        );
+
         return;
+
     }
 
 
-    currentPage = 1;
-    totalPages = 1;
+    /* -----------------------------------------------------
+       RESET
+    ----------------------------------------------------- */
 
     conversationMessages = [];
 
     messageIds.clear();
+
+    currentPage = 0;
+
+    totalPages = 1;
 
     messagesContainer.innerHTML = "";
 
@@ -793,39 +791,73 @@ async function connect() {
 
     connected = false;
 
-    connectButton.disabled = true;
 
-
-    document.getElementById("headerTitle").innerText =
+    document
+        .getElementById(
+            "headerTitle"
+        )
+        .innerText =
         "+" + PHONE;
 
-    document.getElementById("headerSub").innerText =
+
+    document
+        .getElementById(
+            "headerSub"
+        )
+        .innerText =
         "Connecting...";
+
+
+    connectButton.disabled =
+        true;
 
 
     try {
 
-        await loadFirstPage();
+        await loadInitialConversation();
+
 
         connected = true;
 
-        document.getElementById("headerSub").innerText =
+
+        document
+            .getElementById(
+                "headerSub"
+            )
+            .innerText =
             "Connected";
+
+
+        setStatus(
+            "Connected • " +
+            conversationMessages.length +
+            " messages"
+        );
+
 
     }
     catch (error) {
 
-        showError(error.message);
+        showError(
+            error.message
+        );
 
-        document.getElementById("headerSub").innerText =
+
+        document
+            .getElementById(
+                "headerSub"
+            )
+            .innerText =
             "Connection failed";
 
     }
     finally {
 
-        connectButton.disabled = false;
+        connectButton.disabled =
+            false;
 
     }
+
 }
 
 
@@ -841,11 +873,16 @@ async function apiRequest(
 
     const options = {
 
-        method,
+        method: method,
 
         headers: {
-            "Content-Type": "application/json",
-            "apikey": API_KEY
+
+            "Content-Type":
+                "application/json",
+
+            "apikey":
+                API_KEY
+
         }
 
     };
@@ -854,12 +891,27 @@ async function apiRequest(
     if (body !== null) {
 
         options.body =
-            JSON.stringify(body);
+            JSON.stringify(
+                body
+            );
 
     }
 
 
+    console.log(
+        "REQUEST:",
+        API_URL + endpoint
+    );
+
+
+    console.log(
+        "BODY:",
+        body
+    );
+
+
     let response;
+
 
     try {
 
@@ -873,9 +925,15 @@ async function apiRequest(
     catch (error) {
 
         throw new Error(
+
             "Failed to fetch Evolution API.\n\n" +
-            "URL:\n" +
-            API_URL + endpoint
+
+            API_URL + endpoint +
+
+            "\n\n" +
+
+            "Check your Railway URL and CORS."
+
         );
 
     }
@@ -886,6 +944,7 @@ async function apiRequest(
 
 
     let data;
+
 
     try {
 
@@ -902,353 +961,239 @@ async function apiRequest(
     }
 
 
+    console.log(
+        "HTTP:",
+        response.status
+    );
+
+
+    console.log(
+        "RESPONSE:",
+        data
+    );
+
+
     if (!response.ok) {
 
         throw new Error(
+
             "Evolution API HTTP " +
             response.status +
             "\n\n" +
+
             (
-                typeof data === "string"
+                typeof data ===
+                "string"
+
                     ? data
+
                     : JSON.stringify(
                         data,
                         null,
                         2
                     )
+
             )
+
         );
 
     }
 
 
     return data;
+
 }
 
 
 /* =========================================================
-   LOAD FIRST PAGE
+   INITIAL CONVERSATION
 ========================================================= */
 
-async function loadFirstPage() {
+async function loadInitialConversation() {
+
+    initialLoading = true;
+
+    loading = false;
+
+
+    loadingElement.style.display =
+        "block";
+
 
     setStatus(
-        "Loading conversation..."
-    );
-
-    await loadPage(
-        1,
-        true
+        "Searching conversation..."
     );
 
 
     /*
-     * IMPORTANT:
+     * Start from API page 1.
      *
-     * If the first page does not contain
-     * enough messages to create a scrollbar,
-     * automatically load more pages.
+     * We will continue loading pages
+     * until enough messages exist to
+     * create a scrollbar.
      */
+
+    let page = 1;
 
     let safety = 0;
 
-    while (
-        chat.scrollHeight <= chat.clientHeight + 100 &&
-        currentPage < totalPages &&
-        safety < 10
-    ) {
-
-        safety++;
-
-        await loadOlderPage(
-            currentPage + 1,
-            false
-        );
-
-    }
-
-
-    /*
-     * Start at the bottom.
-     */
-
-    setTimeout(() => {
-
-        chat.scrollTop =
-            chat.scrollHeight;
-
-    }, 50);
-
-
-    setStatus(
-        "Loaded " +
-        conversationMessages.length +
-        " messages"
-    );
-}
-
-
-/* =========================================================
-   LOAD PAGE
-========================================================= */
-
-async function loadPage(
-    page,
-    firstPage = false
-) {
-
-    if (loading) {
-        return;
-    }
-
-    if (page > totalPages) {
-        return;
-    }
-
-
-    loading = true;
-
-    loadingElement.style.display =
-        "block";
-
 
     try {
 
-        const data =
-            await apiRequest(
+        while (
+            safety < 30
+        ) {
 
-                "/chat/findMessages/" +
-                encodeURIComponent(
-                    INSTANCE
-                ),
+            safety++;
 
-                "POST",
 
-                {
-                    page: page,
-                    offset: PAGE_SIZE
-                }
+            /*
+             * Fetch one API page.
+             */
+
+            const result =
+                await fetchPage(
+                    page
+                );
+
+
+            currentPage =
+                page;
+
+
+            totalPages =
+                result.totalPages;
+
+
+            /*
+             * Add matching messages.
+             */
+
+            addMessages(
+                result.matches
+            );
+
+
+            /*
+             * Sort.
+             */
+
+            sortMessages();
+
+
+            /*
+             * Render.
+             */
+
+            renderMessages();
+
+
+            /*
+             * Wait for browser to
+             * calculate scrollHeight.
+             */
+
+            await nextFrame();
+
+
+            setStatus(
+
+                "Searching page " +
+                page +
+                " / " +
+                totalPages +
+
+                " • " +
+
+                conversationMessages.length +
+                " messages"
 
             );
+
+
+            /*
+             * IMPORTANT:
+             *
+             * If the chat is now actually
+             * scrollable, stop.
+             */
+
+            const scrollable =
+
+                chat.scrollHeight >
+                chat.clientHeight + 50;
+
+
+            if (
+                scrollable &&
+                conversationMessages.length >= 10
+            ) {
+
+                break;
+
+            }
+
+
+            /*
+             * No more pages.
+             */
+
+            if (
+                page >=
+                totalPages
+            ) {
+
+                break;
+
+            }
+
+
+            page++;
+
+        }
 
 
         /*
-         * Your actual Evolution response:
-         *
-         * data.messages.records
+         * If messages exist, put user
+         * at the newest message.
          */
 
-        const records =
-            extractRecords(data);
+        if (
+            conversationMessages.length
+        ) {
 
-
-        const pagination =
-            getPagination(
-                data,
-                page
-            );
-
-
-        currentPage =
-            pagination.currentPage;
-
-        totalPages =
-            pagination.pages;
-
-
-        /*
-         * Find this phone's messages.
-         */
-
-        const matches =
-            filterConversation(
-                records,
-                PHONE
-            );
-
-
-        addMessages(
-            matches
-        );
-
-
-        renderMessages();
-
-
-        setStatus(
-            "Page " +
-            currentPage +
-            " / " +
-            totalPages +
-            " • " +
-            conversationMessages.length +
-            " messages"
-        );
-
-
-    }
-    finally {
-
-        loading = false;
-
-        loadingElement.style.display =
-            "none";
-
-    }
-}
-
-
-/* =========================================================
-   LOAD OLDER PAGE
-========================================================= */
-
-async function loadOlderPage(
-    page,
-    preserveScroll = true
-) {
-
-    if (loading) {
-        return;
-    }
-
-    if (page > totalPages) {
-
-        showBeginning();
-
-        return;
-
-    }
-
-
-    loading = true;
-
-    loadingElement.style.display =
-        "block";
-
-
-    /*
-     * Save current position.
-     */
-
-    const oldHeight =
-        chat.scrollHeight;
-
-    const oldTop =
-        chat.scrollTop;
-
-
-    try {
-
-        setStatus(
-            "Loading older messages..."
-        );
-
-
-        const data =
-            await apiRequest(
-
-                "/chat/findMessages/" +
-                encodeURIComponent(
-                    INSTANCE
-                ),
-
-                "POST",
-
-                {
-                    page: page,
-                    offset: PAGE_SIZE
-                }
-
-            );
-
-
-        const records =
-            extractRecords(data);
-
-
-        const pagination =
-            getPagination(
-                data,
-                page
-            );
-
-
-        currentPage =
-            pagination.currentPage;
-
-        totalPages =
-            pagination.pages;
-
-
-        const matches =
-            filterConversation(
-                records,
-                PHONE
-            );
-
-
-        addMessages(
-            matches
-        );
-
-
-        /*
-         * Sort oldest → newest.
-         */
-
-        conversationMessages.sort(
-            (a, b) =>
-                getTimestamp(a) -
-                getTimestamp(b)
-        );
-
-
-        renderMessages();
-
-
-        /*
-         * Preserve exact scroll position.
-         */
-
-        if (preserveScroll) {
-
-            const newHeight =
-                chat.scrollHeight;
+            await nextFrame();
 
 
             chat.scrollTop =
-                oldTop +
-                (
-                    newHeight -
-                    oldHeight
-                );
+                chat.scrollHeight;
+
+
+            setStatus(
+
+                "Loaded " +
+                conversationMessages.length +
+                " messages • scroll up for older"
+
+            );
 
         }
+        else {
 
+            endElement.innerText =
+                "No messages found for +" +
+                PHONE;
 
-        if (
-            currentPage >=
-            totalPages
-        ) {
-
-            showBeginning();
+            setStatus(
+                "No messages found"
+            );
 
         }
-
-
-        setStatus(
-            "Page " +
-            currentPage +
-            " / " +
-            totalPages +
-            " • " +
-            conversationMessages.length +
-            " messages"
-        );
-
 
     }
     finally {
+
+        initialLoading = false;
 
         loading = false;
 
@@ -1256,6 +1201,88 @@ async function loadOlderPage(
             "none";
 
     }
+
+}
+
+
+/* =========================================================
+   FETCH PAGE
+========================================================= */
+
+async function fetchPage(
+    page
+) {
+
+    const data =
+        await apiRequest(
+
+            "/chat/findMessages/" +
+            encodeURIComponent(
+                INSTANCE
+            ),
+
+            "POST",
+
+            {
+                page: page,
+
+                offset:
+                    PAGE_SIZE
+
+            }
+
+        );
+
+
+    /*
+     * YOUR ACTUAL RESPONSE:
+     *
+     * data.messages.records
+     */
+
+    const records =
+        extractRecords(
+            data
+        );
+
+
+    const totalPages =
+        Number(
+            data?.messages?.pages
+        ) || 1;
+
+
+    /*
+     * Filter only selected number.
+     */
+
+    const matches =
+        filterConversation(
+            records,
+            PHONE
+        );
+
+
+    console.log(
+        "PAGE",
+        page,
+        "records:",
+        records.length,
+        "matches:",
+        matches.length
+    );
+
+
+    return {
+
+        records,
+
+        matches,
+
+        totalPages
+
+    };
+
 }
 
 
@@ -1263,7 +1290,13 @@ async function loadOlderPage(
    EXTRACT RECORDS
 ========================================================= */
 
-function extractRecords(data) {
+function extractRecords(
+    data
+) {
+
+    /*
+     * MAIN FORMAT
+     */
 
     if (
         data &&
@@ -1278,8 +1311,14 @@ function extractRecords(data) {
     }
 
 
+    /*
+     * Fallback
+     */
+
     if (
-        Array.isArray(data)
+        Array.isArray(
+            data
+        )
     ) {
 
         return data;
@@ -1312,53 +1351,12 @@ function extractRecords(data) {
 
 
     return [];
+
 }
 
 
 /* =========================================================
-   PAGINATION
-========================================================= */
-
-function getPagination(
-    data,
-    fallbackPage
-) {
-
-    if (
-        data &&
-        data.messages
-    ) {
-
-        return {
-
-            pages:
-                Number(
-                    data.messages.pages
-                ) || 1,
-
-            currentPage:
-                Number(
-                    data.messages.currentPage
-                ) ||
-                fallbackPage
-
-        };
-
-    }
-
-
-    return {
-
-        pages: 1,
-
-        currentPage: fallbackPage
-
-    };
-}
-
-
-/* =========================================================
-   FILTER PHONE
+   FILTER CONVERSATION
 ========================================================= */
 
 function filterConversation(
@@ -1367,7 +1365,9 @@ function filterConversation(
 ) {
 
     const target =
-        cleanNumber(phone);
+        cleanNumber(
+            phone
+        );
 
 
     return records.filter(
@@ -1390,7 +1390,7 @@ function filterConversation(
 
 
             /*
-             * Direct WhatsApp chat.
+             * Direct WhatsApp number.
              */
 
             if (
@@ -1406,18 +1406,43 @@ function filterConversation(
 
 
             /*
-             * LID direct chat.
+             * Some versions use LID.
              */
 
             if (
                 String(
                     remoteJid
-                ).endsWith("@lid")
+                ).endsWith(
+                    "@lid"
+                )
             ) {
 
                 if (
                     jidMatches(
                         remoteJidAlt,
+                        target
+                    )
+                ) {
+
+                    return true;
+
+                }
+
+
+                /*
+                 * participantAlt is checked
+                 * ONLY for LID chats.
+                 */
+
+                const participantAlt =
+                    key.participantAlt ||
+                    msg.participantAlt ||
+                    "";
+
+
+                if (
+                    jidMatches(
+                        participantAlt,
                         target
                     )
                 ) {
@@ -1433,6 +1458,7 @@ function filterConversation(
 
         }
     );
+
 }
 
 
@@ -1446,21 +1472,26 @@ function jidMatches(
 ) {
 
     if (!jid) {
+
         return false;
+
     }
 
 
     const value =
-        String(jid);
+        String(
+            jid
+        );
 
 
     /*
-     * Never treat group chats as
-     * private chats.
+     * Do not match groups.
      */
 
     if (
-        value.endsWith("@g.us")
+        value.endsWith(
+            "@g.us"
+        )
     ) {
 
         return false;
@@ -1468,8 +1499,14 @@ function jidMatches(
     }
 
 
+    /*
+     * Do not match status.
+     */
+
     if (
-        value.includes("status@")
+        value.includes(
+            "status@"
+        )
     ) {
 
         return false;
@@ -1478,13 +1515,28 @@ function jidMatches(
 
 
     const digits =
-        cleanNumber(value);
+        cleanNumber(
+            value
+        );
+
+
+    if (!digits) {
+
+        return false;
+
+    }
 
 
     return (
+
         digits === target ||
-        digits.endsWith(target)
+
+        digits.endsWith(
+            target
+        )
+
     );
+
 }
 
 
@@ -1492,7 +1544,9 @@ function jidMatches(
    CLEAN NUMBER
 ========================================================= */
 
-function cleanNumber(value) {
+function cleanNumber(
+    value
+) {
 
     return String(
         value || ""
@@ -1501,6 +1555,7 @@ function cleanNumber(value) {
         /\D/g,
         ""
     );
+
 }
 
 
@@ -1508,7 +1563,9 @@ function cleanNumber(value) {
    ADD MESSAGES
 ========================================================= */
 
-function addMessages(list) {
+function addMessages(
+    list
+) {
 
     for (
         const msg
@@ -1516,11 +1573,15 @@ function addMessages(list) {
     ) {
 
         const id =
-            getMessageId(msg);
+            getMessageId(
+                msg
+            );
 
 
         if (
-            messageIds.has(id)
+            messageIds.has(
+                id
+            )
         ) {
 
             continue;
@@ -1528,13 +1589,31 @@ function addMessages(list) {
         }
 
 
-        messageIds.add(id);
+        messageIds.add(
+            id
+        );
+
 
         conversationMessages.push(
             msg
         );
 
     }
+
+}
+
+
+/* =========================================================
+   SORT
+========================================================= */
+
+function sortMessages() {
+
+    conversationMessages.sort(
+        (a, b) =>
+            getTimestamp(a) -
+            getTimestamp(b)
+    );
 
 }
 
@@ -1549,11 +1628,7 @@ function renderMessages() {
         "";
 
 
-    conversationMessages.sort(
-        (a, b) =>
-            getTimestamp(a) -
-            getTimestamp(b)
-    );
+    sortMessages();
 
 
     for (
@@ -1568,6 +1643,7 @@ function renderMessages() {
         );
 
     }
+
 }
 
 
@@ -1575,7 +1651,9 @@ function renderMessages() {
    CREATE MESSAGE
 ========================================================= */
 
-function createMessageElement(msg) {
+function createMessageElement(
+    msg
+) {
 
     const fromMe =
         Boolean(
@@ -1608,18 +1686,10 @@ function createMessageElement(msg) {
         "bubble";
 
 
-    const text =
-        document.createElement(
-            "div"
+    const content =
+        getMessageContent(
+            msg
         );
-
-
-    text.className =
-        "text";
-
-
-    text.innerText =
-        getMessageText(msg);
 
 
     const time =
@@ -1634,128 +1704,329 @@ function createMessageElement(msg) {
 
     time.innerText =
         formatTime(
-            getTimestamp(msg)
+            getTimestamp(
+                msg
+            )
         );
 
 
-    bubble.appendChild(text);
+    bubble.appendChild(
+        content
+    );
 
-    bubble.appendChild(time);
 
-    wrapper.appendChild(bubble);
+    bubble.appendChild(
+        time
+    );
+
+
+    wrapper.appendChild(
+        bubble
+    );
 
 
     return wrapper;
+
 }
 
 
 /* =========================================================
-   MESSAGE TEXT
+   MESSAGE CONTENT
 ========================================================= */
 
-function getMessageText(msg) {
+function getMessageContent(
+    msg
+) {
+
+    const container =
+        document.createElement(
+            "div"
+        );
+
 
     const message =
-        msg?.message || {};
+        msg?.message ||
+        {};
 
+
+    /*
+     * TEXT
+     */
 
     if (
-        typeof message.conversation ===
+        typeof
+        message.conversation ===
         "string"
     ) {
 
-        return message.conversation;
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
+            message.conversation;
+
+
+        container.appendChild(
+            text
+        );
+
+
+        return container;
 
     }
 
+
+    /*
+     * EXTENDED TEXT
+     */
 
     if (
         message.extendedTextMessage
     ) {
 
-        return (
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
+
             message
             .extendedTextMessage
             .text ||
-            ""
+
+            "";
+
+
+        container.appendChild(
+            text
         );
+
+
+        return container;
 
     }
 
+
+    /*
+     * IMAGE
+     */
 
     if (
         message.imageMessage
     ) {
 
-        return (
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
             "📷 " +
             (
                 message
                 .imageMessage
                 .caption ||
                 "Image"
-            )
+            );
+
+
+        container.appendChild(
+            text
         );
+
+
+        return container;
 
     }
 
+
+    /*
+     * VIDEO
+     */
 
     if (
         message.videoMessage
     ) {
 
-        return (
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
             "🎥 " +
             (
                 message
                 .videoMessage
                 .caption ||
                 "Video"
-            )
+            );
+
+
+        container.appendChild(
+            text
         );
+
+
+        return container;
 
     }
 
+
+    /*
+     * AUDIO
+     */
 
     if (
         message.audioMessage
     ) {
 
-        return "🎵 Audio";
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
+            "🎵 Audio";
+
+
+        container.appendChild(
+            text
+        );
+
+
+        return container;
 
     }
 
+
+    /*
+     * DOCUMENT
+     */
 
     if (
         message.documentMessage
     ) {
 
-        return (
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
             "📄 " +
             (
                 message
                 .documentMessage
                 .fileName ||
                 "Document"
-            )
+            );
+
+
+        container.appendChild(
+            text
         );
+
+
+        return container;
 
     }
 
+
+    /*
+     * STICKER
+     */
 
     if (
         message.stickerMessage
     ) {
 
-        return "🖼️ Sticker";
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
+            "🖼️ Sticker";
+
+
+        container.appendChild(
+            text
+        );
+
+
+        return container;
 
     }
 
 
-    return (
-        msg.messageType ||
-        "Message"
+    /*
+     * UNKNOWN
+     */
+
+    const text =
+        document.createElement(
+            "div"
+        );
+
+
+    text.className =
+        "text";
+
+
+    text.innerText =
+        "📩 " +
+        (
+            msg.messageType ||
+            "Message"
+        );
+
+
+    container.appendChild(
+        text
     );
+
+
+    return container;
+
 }
 
 
@@ -1763,16 +2034,25 @@ function getMessageText(msg) {
    MESSAGE ID
 ========================================================= */
 
-function getMessageId(msg) {
+function getMessageId(
+    msg
+) {
 
     return (
+
         msg?.key?.id ||
+
         msg?.id ||
+
         (
             "generated-" +
+            getTimestamp(msg) +
+            "-" +
             Math.random()
         )
+
     );
+
 }
 
 
@@ -1780,115 +2060,130 @@ function getMessageId(msg) {
    TIMESTAMP
 ========================================================= */
 
-function getTimestamp(msg) {
+function getTimestamp(
+    msg
+) {
 
-    let t =
+    let timestamp =
+
         msg?.messageTimestamp ||
+
         msg?.timestamp ||
+
         0;
 
 
     if (
-        typeof t === "object"
+        typeof timestamp ===
+        "object"
     ) {
 
-        t =
-            t.low ||
-            t.seconds ||
+        timestamp =
+
+            timestamp.low ||
+
+            timestamp.seconds ||
+
             0;
 
     }
 
 
-    t =
-        Number(t);
+    timestamp =
+        Number(
+            timestamp
+        );
 
+
+    /*
+     * WhatsApp timestamp is
+     * normally seconds.
+     */
 
     if (
-        t > 0 &&
-        t < 100000000000
+        timestamp > 0 &&
+        timestamp < 100000000000
     ) {
 
-        t *= 1000;
+        timestamp *= 1000;
 
     }
 
 
-    return t;
+    return timestamp || 0;
+
 }
 
 
 /* =========================================================
-   TIME
+   FORMAT TIME
 ========================================================= */
 
-function formatTime(timestamp) {
+function formatTime(
+    timestamp
+) {
 
     if (!timestamp) {
+
         return "";
+
     }
 
 
     return new Date(
         timestamp
-    ).toLocaleTimeString(
+    ).toLocaleString(
         [],
         {
+            day: "2-digit",
+            month: "2-digit",
             hour: "2-digit",
             minute: "2-digit"
         }
     );
+
 }
 
 
 /* =========================================================
-   THE IMPORTANT SCROLL HANDLER
+   NEXT FRAME
+========================================================= */
+
+function nextFrame() {
+
+    return new Promise(
+        resolve => {
+
+            requestAnimationFrame(
+                () => resolve()
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL UP
 ========================================================= */
 
 chat.addEventListener(
     "scroll",
-    async () => {
+    async function () {
 
         /*
-         * User reached the TOP.
-         *
-         * Load older messages.
+         * Reached top.
          */
 
         if (
-            chat.scrollTop <= 80 &&
+            chat.scrollTop <= 100 &&
             !loading &&
+            !initialLoading &&
             currentPage < totalPages
         ) {
 
-            const oldHeight =
-                chat.scrollHeight;
-
-            const oldTop =
-                chat.scrollTop;
-
-
-            await loadOlderPage(
-                currentPage + 1,
-                false
-            );
-
-
-            /*
-             * Restore position after
-             * adding messages.
-             */
-
-            const newHeight =
-                chat.scrollHeight;
-
-
-            chat.scrollTop =
-                oldTop +
-                (
-                    newHeight -
-                    oldHeight
-                );
+            await loadOlderMessages();
 
         }
 
@@ -1897,100 +2192,157 @@ chat.addEventListener(
 
 
 /* =========================================================
-   ALSO SUPPORT MOUSE WHEEL
+   LOAD OLDER MESSAGES
 ========================================================= */
 
-chat.addEventListener(
-    "wheel",
-    async (event) => {
+async function loadOlderMessages() {
 
-        /*
-         * If the user is scrolling upward
-         * and is already near the top,
-         * load another page.
-         */
+    if (
+        loading ||
+        currentPage >= totalPages
+    ) {
 
         if (
-            event.deltaY < 0 &&
-            chat.scrollTop <= 80 &&
-            !loading &&
-            currentPage < totalPages
+            currentPage >= totalPages
         ) {
 
-            await loadOlderPage(
-                currentPage + 1,
-                true
+            endElement.innerText =
+                "Beginning of conversation";
+
+        }
+
+        return;
+
+    }
+
+
+    loading = true;
+
+    loadingElement.style.display =
+        "block";
+
+
+    /*
+     * Save position.
+     */
+
+    const oldHeight =
+        chat.scrollHeight;
+
+
+    const oldTop =
+        chat.scrollTop;
+
+
+    try {
+
+        const nextPage =
+            currentPage + 1;
+
+
+        setStatus(
+
+            "Loading older messages... " +
+
+            nextPage +
+            " / " +
+            totalPages
+
+        );
+
+
+        const result =
+            await fetchPage(
+                nextPage
             );
 
-        }
 
-    }
-);
-
-
-/* =========================================================
-   TOUCH / MOBILE
-========================================================= */
-
-let touchStartY = 0;
+        currentPage =
+            nextPage;
 
 
-chat.addEventListener(
-    "touchstart",
-    event => {
-
-        if (
-            event.touches.length
-        ) {
-
-            touchStartY =
-                event.touches[0].clientY;
-
-        }
-
-    }
-);
+        totalPages =
+            result.totalPages;
 
 
-chat.addEventListener(
-    "touchmove",
-    async event => {
-
-        if (
-            !event.touches.length
-        ) {
-
-            return;
-
-        }
+        addMessages(
+            result.matches
+        );
 
 
-        const currentY =
-            event.touches[0].clientY;
+        sortMessages();
+
+
+        renderMessages();
 
 
         /*
-         * Finger moving down while
-         * already at the top =
-         * user wants older messages.
+         * Wait for DOM layout.
          */
 
+        await nextFrame();
+
+
+        /*
+         * Restore the user's
+         * relative position.
+         */
+
+        const newHeight =
+            chat.scrollHeight;
+
+
+        chat.scrollTop =
+            oldTop +
+            (
+                newHeight -
+                oldHeight
+            );
+
+
+        setStatus(
+
+            "Loaded " +
+            conversationMessages.length +
+            " messages • " +
+
+            "page " +
+            currentPage +
+            "/" +
+            totalPages
+
+        );
+
+
         if (
-            currentY > touchStartY &&
-            chat.scrollTop <= 80 &&
-            !loading &&
-            currentPage < totalPages
+            currentPage >=
+            totalPages
         ) {
 
-            await loadOlderPage(
-                currentPage + 1,
-                true
-            );
+            endElement.innerText =
+                "Beginning of conversation";
 
         }
 
     }
-);
+    catch (error) {
+
+        showError(
+            "Failed to load older messages.\n\n" +
+            error.message
+        );
+
+    }
+    finally {
+
+        loading = false;
+
+        loadingElement.style.display =
+            "none";
+
+    }
+
+}
 
 
 /* =========================================================
@@ -2010,7 +2362,9 @@ async function sendMessage() {
 
 
     if (!text) {
+
         return;
+
     }
 
 
@@ -2025,15 +2379,22 @@ async function sendMessage() {
     }
 
 
-    sendButton.disabled = true;
+    sendButton.disabled =
+        true;
 
 
     try {
+
+        setStatus(
+            "Sending..."
+        );
+
 
         const data =
             await apiRequest(
 
                 "/message/sendText/" +
+
                 encodeURIComponent(
                     INSTANCE
                 ),
@@ -2041,8 +2402,11 @@ async function sendMessage() {
                 "POST",
 
                 {
-                    number: PHONE,
-                    text: text
+                    number:
+                        PHONE,
+
+                    text:
+                        text
                 }
 
             );
@@ -2052,7 +2416,7 @@ async function sendMessage() {
 
 
         /*
-         * Show immediately.
+         * Display immediately.
          */
 
         const localMessage = {
@@ -2088,22 +2452,20 @@ async function sendMessage() {
 
 
         addMessages(
-            [localMessage]
+            [
+                localMessage
+            ]
         );
 
 
         renderMessages();
 
 
-        setTimeout(
-            () => {
+        await nextFrame();
 
-                chat.scrollTop =
-                    chat.scrollHeight;
 
-            },
-            50
-        );
+        chat.scrollTop =
+            chat.scrollHeight;
 
 
         setStatus(
@@ -2121,7 +2483,8 @@ async function sendMessage() {
     }
     finally {
 
-        sendButton.disabled = false;
+        sendButton.disabled =
+            false;
 
     }
 
@@ -2129,10 +2492,12 @@ async function sendMessage() {
 
 
 /* =========================================================
-   ENTER
+   ENTER TO SEND
 ========================================================= */
 
-function handleEnter(event) {
+function handleEnter(
+    event
+) {
 
     if (
         event.key === "Enter" &&
@@ -2152,7 +2517,9 @@ function handleEnter(event) {
    STATUS
 ========================================================= */
 
-function setStatus(text) {
+function setStatus(
+    text
+) {
 
     statusElement.innerText =
         text;
@@ -2164,7 +2531,9 @@ function setStatus(text) {
    ERROR
 ========================================================= */
 
-function showError(text) {
+function showError(
+    text
+) {
 
     errorElement.innerText =
         text;
@@ -2194,6 +2563,6 @@ function clearError() {
 }
 
 </script>
-</body>
 
+</body>
 </html>
