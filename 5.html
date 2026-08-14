@@ -1,372 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Evolution WhatsApp Chat</title>
 
+
 <style>
 
-*{
-    box-sizing:border-box;
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
 }
 
 html,
-body{
-    margin:0;
-    width:100%;
-    height:100%;
-    font-family:Arial,Helvetica,sans-serif;
-    background:#111b21;
-    color:#e9edef;
+body {
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #111b21;
+
+    color: #e9edef;
+
 }
 
-body{
-    overflow:hidden;
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
 }
 
-.app{
-    width:100%;
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-}
 
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+========================================================= */
 
-.header{
+.header {
 
-    height:65px;
+    height: 64px;
 
-    background:#202c33;
+    display: flex;
+    align-items: center;
 
-    display:flex;
+    padding: 8px 15px;
 
-    align-items:center;
+    background: #202c33;
 
-    padding:8px 15px;
+    gap: 12px;
 
-    gap:12px;
-
-}
-
-.avatar{
-
-    width:45px;
-    height:45px;
-
-    border-radius:50%;
-
-    background:#00a884;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    font-weight:bold;
+    flex-shrink: 0;
 
 }
 
-.headerInfo{
-    flex:1;
+
+.avatar {
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #00a884;
+
+    color: white;
+
+    font-weight: bold;
+
 }
 
-.headerTitle{
-    font-size:17px;
-    font-weight:bold;
+
+.headerInfo {
+
+    flex: 1;
+
+    min-width: 0;
+
 }
 
-.headerSub{
-    margin-top:3px;
-    font-size:12px;
-    color:#8696a0;
+
+.headerTitle {
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
 }
 
 
-/* =========================
+.headerSub {
+
+    margin-top: 3px;
+
+    font-size: 12px;
+
+    color: #8696a0;
+
+}
+
+
+/* =========================================================
    SETTINGS
-========================= */
+========================================================= */
 
-.settings{
+.settings {
 
-    background:#182229;
+    background: #182229;
 
-    padding:10px;
+    padding: 10px;
 
-    display:grid;
+    display: grid;
 
     grid-template-columns:
         2fr
         1fr
+        1.2fr
         1.5fr
-        2fr
         100px;
 
-    gap:7px;
+    gap: 7px;
 
-}
-
-.settings input{
-
-    width:100%;
-
-    padding:10px;
-
-    border-radius:6px;
-
-    border:1px solid #3b4a54;
-
-    outline:none;
-
-    background:#2a3942;
-
-    color:white;
-
-}
-
-.settings input:focus{
-
-    border-color:#00a884;
-
-}
-
-button{
-
-    border:0;
-
-    border-radius:6px;
-
-    padding:10px;
-
-    background:#00a884;
-
-    color:white;
-
-    cursor:pointer;
-
-}
-
-button:hover{
-
-    background:#008f72;
+    flex-shrink: 0;
 
 }
 
 
-/* =========================
+.settings input {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    border: 1px solid #3b4a54;
+
+    outline: none;
+
+    background: #2a3942;
+
+    color: white;
+
+}
+
+
+.settings input:focus {
+
+    border-color: #00a884;
+
+}
+
+
+button {
+
+    border: 0;
+
+    border-radius: 6px;
+
+    padding: 10px;
+
+    background: #00a884;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+button:hover {
+
+    background: #008f72;
+
+}
+
+
+button:disabled {
+
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
    STATUS
-========================= */
+========================================================= */
 
-.status{
+.status {
 
-    background:#182229;
+    background: #182229;
 
-    padding:7px 12px;
+    padding: 7px 12px;
 
-    color:#aebac1;
+    color: #aebac1;
 
-    font-size:12px;
+    font-size: 12px;
+
+    flex-shrink: 0;
 
 }
 
 
-/* =========================
+/* =========================================================
    ERROR
-========================= */
+========================================================= */
 
-.error{
+.error {
 
-    display:none;
+    display: none;
 
-    margin:8px;
+    margin: 8px;
 
-    padding:10px;
+    padding: 10px;
 
-    border-radius:6px;
+    border-radius: 6px;
 
-    background:#4b2020;
+    background: #4b2020;
 
-    color:#ffb4b4;
+    color: #ffb4b4;
 
-    white-space:pre-wrap;
+    white-space: pre-wrap;
 
-    font-family:monospace;
+    font-family: monospace;
 
-    font-size:12px;
+    font-size: 12px;
 
-    max-height:180px;
+    max-height: 180px;
 
-    overflow:auto;
+    overflow: auto;
+
+    flex-shrink: 0;
 
 }
 
 
-/* =========================
+/* =========================================================
    CHAT
-========================= */
+========================================================= */
 
-.chat{
+.chat {
 
-    flex:1;
+    flex: 1;
 
-    overflow-y:auto;
+    min-height: 0;
 
-    padding:15px;
+    overflow-y: auto;
 
-    scroll-behavior:auto;
+    padding: 15px;
 
-}
-
-.loading{
-
-    display:none;
-
-    text-align:center;
-
-    padding:10px;
-
-    color:#8696a0;
-
-    font-size:13px;
-
-}
-
-.end{
-
-    text-align:center;
-
-    padding:15px;
-
-    color:#667781;
-
-    font-size:12px;
+    background:
+        #0b141a;
 
 }
 
 
-/* =========================
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+
+    display: none;
+
+    text-align: center;
+
+    padding: 10px;
+
+    color: #8696a0;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================================
+   END
+========================================================= */
+
+.end {
+
+    text-align: center;
+
+    padding: 15px;
+
+    color: #667781;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
    MESSAGE
-========================= */
+========================================================= */
 
-.message{
+.message {
 
-    display:flex;
+    display: flex;
 
-    margin:4px 0;
-
-}
-
-.message.incoming{
-
-    justify-content:flex-start;
-
-}
-
-.message.outgoing{
-
-    justify-content:flex-end;
-
-}
-
-.bubble{
-
-    max-width:70%;
-
-    padding:8px 10px;
-
-    border-radius:8px;
-
-    word-break:break-word;
-
-}
-
-.incoming .bubble{
-
-    background:#202c33;
-
-}
-
-.outgoing .bubble{
-
-    background:#005c4b;
-
-}
-
-.text{
-
-    white-space:pre-wrap;
-
-    font-size:15px;
-
-    line-height:1.35;
-
-}
-
-.time{
-
-    margin-top:4px;
-
-    text-align:right;
-
-    font-size:10px;
-
-    color:#aebac1;
+    margin: 4px 0;
 
 }
 
 
-/* =========================
+.message.incoming {
+
+    justify-content: flex-start;
+
+}
+
+
+.message.outgoing {
+
+    justify-content: flex-end;
+
+}
+
+
+.bubble {
+
+    max-width: 70%;
+
+    padding: 8px 10px;
+
+    border-radius: 8px;
+
+    word-break: break-word;
+
+}
+
+
+.incoming .bubble {
+
+    background: #202c33;
+
+}
+
+
+.outgoing .bubble {
+
+    background: #005c4b;
+
+}
+
+
+.text {
+
+    white-space: pre-wrap;
+
+    font-size: 15px;
+
+    line-height: 1.4;
+
+}
+
+
+.time {
+
+    margin-top: 4px;
+
+    text-align: right;
+
+    font-size: 10px;
+
+    color: #aebac1;
+
+}
+
+
+/* =========================================================
+   MEDIA
+========================================================= */
+
+.media {
+
+    max-width: 300px;
+
+    border-radius: 8px;
+
+    display: block;
+
+}
+
+
+.caption {
+
+    margin-top: 5px;
+
+    white-space: pre-wrap;
+
+}
+
+
+/* =========================================================
    INPUT
-========================= */
+========================================================= */
 
-.bottom{
+.bottom {
 
-    display:flex;
+    display: flex;
 
-    gap:8px;
+    gap: 8px;
 
-    padding:10px;
+    padding: 10px;
 
-    background:#202c33;
+    background: #202c33;
 
-}
-
-.bottom input{
-
-    flex:1;
-
-    padding:13px;
-
-    border:0;
-
-    outline:none;
-
-    border-radius:8px;
-
-    background:#2a3942;
-
-    color:white;
-
-}
-
-.send{
-
-    width:80px;
+    flex-shrink: 0;
 
 }
 
 
-/* =========================
+.bottom input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 13px;
+
+    border: 0;
+
+    outline: none;
+
+    border-radius: 8px;
+
+    background: #2a3942;
+
+    color: white;
+
+}
+
+
+.send {
+
+    width: 80px;
+
+}
+
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
-@media(max-width:800px){
+@media(max-width: 800px) {
 
-    .settings{
+    .settings {
 
         grid-template-columns:
             1fr
@@ -374,16 +493,17 @@ button:hover{
 
     }
 
-    .settings button{
 
-        grid-column:
-            span 2;
+    .settings button {
+
+        grid-column: span 2;
 
     }
 
-    .bubble{
 
-        max-width:85%;
+    .bubble {
+
+        max-width: 85%;
 
     }
 
@@ -393,20 +513,23 @@ button:hover{
 
 </head>
 
+
 <body>
+
 
 <div class="app">
 
 
-<!-- =========================
+<!-- =====================================================
      HEADER
-========================= -->
+===================================================== -->
 
 <div class="header">
 
     <div class="avatar">
         WA
     </div>
+
 
     <div class="headerInfo">
 
@@ -416,6 +539,7 @@ button:hover{
         >
             WhatsApp Chat
         </div>
+
 
         <div
             id="headerSub"
@@ -429,11 +553,12 @@ button:hover{
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      SETTINGS
-========================= -->
+===================================================== -->
 
 <div class="settings">
+
 
     <input
         id="apiUrl"
@@ -441,10 +566,12 @@ button:hover{
         value="https://YOUR-RAILWAY-APP.up.railway.app"
     >
 
+
     <input
         id="instance"
         placeholder="Instance name"
     >
+
 
     <input
         id="phone"
@@ -452,13 +579,16 @@ button:hover{
         value="919605515958"
     >
 
+
     <input
         id="apiKey"
         type="password"
-        placeholder="Evolution API key"
+        placeholder="Evolution API Key"
     >
 
+
     <button
+        id="connectButton"
         onclick="connect()"
     >
         Connect
@@ -467,9 +597,9 @@ button:hover{
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      STATUS
-========================= -->
+===================================================== -->
 
 <div
     id="status"
@@ -479,9 +609,9 @@ button:hover{
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      ERROR
-========================= -->
+===================================================== -->
 
 <div
     id="error"
@@ -489,14 +619,15 @@ button:hover{
 ></div>
 
 
-<!-- =========================
+<!-- =====================================================
      CHAT
-========================= -->
+===================================================== -->
 
 <div
     id="chat"
     class="chat"
 >
+
 
     <div
         id="loading"
@@ -505,23 +636,27 @@ button:hover{
         Loading...
     </div>
 
+
     <div
         id="messages"
     ></div>
+
 
     <div
         id="end"
         class="end"
     ></div>
 
+
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      MESSAGE INPUT
-========================= -->
+===================================================== -->
 
 <div class="bottom">
+
 
     <input
         id="messageInput"
@@ -529,7 +664,9 @@ button:hover{
         onkeydown="handleEnter(event)"
     >
 
+
     <button
+        id="sendButton"
         class="send"
         onclick="sendMessage()"
     >
@@ -542,11 +679,14 @@ button:hover{
 </div>
 
 
+
 <script>
 
+
 /* =========================================================
-   VARIABLES
+   GLOBAL VARIABLES
 ========================================================= */
+
 
 let API_URL = "";
 
@@ -556,64 +696,88 @@ let INSTANCE = "";
 
 let PHONE = "";
 
-let PAGE = 1;
 
-const LIMIT = 30;
+/*
+ * Evolution pagination.
+ *
+ * Your API response says:
+ *
+ * total: 11854
+ * pages: 238
+ * currentPage: 1
+ *
+ */
+
+const PAGE_SIZE = 50;
+
+let currentPage = 1;
+
+let totalPages = 1;
+
+
+/*
+ * Messages that belong to
+ * the selected conversation.
+ */
+
+let conversationMessages = [];
+
+
+/*
+ * IDs already displayed.
+ */
+
+const messageIds = new Set();
+
+
+/*
+ * Prevent multiple requests.
+ */
 
 let loading = false;
 
-let hasMore = true;
-
 
 /*
- * All messages returned by Evolution.
+ * Connection state.
  */
 
-let allMessages = [];
-
-
-/*
- * Messages currently displayed.
- */
-
-let displayedMessages = [];
-
-
-/*
- * Used to prevent duplicate messages.
- */
-
-const displayedIds = new Set();
+let connected = false;
 
 
 /* =========================================================
    DOM
 ========================================================= */
 
+
 const chat =
     document.getElementById(
         "chat"
     );
+
 
 const messagesContainer =
     document.getElementById(
         "messages"
     );
 
+
 const loadingElement =
     document.getElementById(
         "loading"
     );
+
 
 const errorElement =
     document.getElementById(
         "error"
     );
 
+
 const statusElement =
     document.getElementById(
         "status"
     );
+
 
 const endElement =
     document.getElementById(
@@ -621,11 +785,24 @@ const endElement =
     );
 
 
+const connectButton =
+    document.getElementById(
+        "connectButton"
+    );
+
+
+const sendButton =
+    document.getElementById(
+        "sendButton"
+    );
+
+
 /* =========================================================
    CONNECT
 ========================================================= */
 
-async function connect(){
+
+async function connect() {
 
     clearError();
 
@@ -674,10 +851,15 @@ async function connect(){
         );
 
 
-    if(!API_URL){
+    /* -----------------------------------------------------
+       VALIDATION
+    ----------------------------------------------------- */
+
+
+    if (!API_URL) {
 
         showError(
-            "Evolution API URL is empty."
+            "Evolution API URL is required."
         );
 
         return;
@@ -685,10 +867,10 @@ async function connect(){
     }
 
 
-    if(!API_KEY){
+    if (!API_KEY) {
 
         showError(
-            "API key is empty."
+            "Evolution API Key is required."
         );
 
         return;
@@ -696,10 +878,10 @@ async function connect(){
     }
 
 
-    if(!INSTANCE){
+    if (!INSTANCE) {
 
         showError(
-            "Instance name is empty."
+            "Instance name is required."
         );
 
         return;
@@ -707,15 +889,35 @@ async function connect(){
     }
 
 
-    if(!PHONE){
+    if (!PHONE) {
 
         showError(
-            "Phone number is empty."
+            "Phone number is required."
         );
 
         return;
 
     }
+
+
+    /* -----------------------------------------------------
+       RESET
+    ----------------------------------------------------- */
+
+
+    currentPage = 1;
+
+    totalPages = 1;
+
+    conversationMessages = [];
+
+    messageIds.clear();
+
+    messagesContainer.innerHTML = "";
+
+    endElement.innerText = "";
+
+    connected = false;
 
 
     document
@@ -731,45 +933,69 @@ async function connect(){
             "headerSub"
         )
         .innerText =
-        "Loading conversation";
+        "Connecting...";
 
 
-    PAGE = 1;
-
-    hasMore = true;
-
-    allMessages = [];
-
-    displayedMessages = [];
-
-    displayedIds.clear();
-
-    messagesContainer.innerHTML = "";
-
-    endElement.innerText = "";
+    connectButton.disabled = true;
 
 
-    try{
+    try {
 
         setStatus(
-            "Connecting..."
+            "Connecting to Evolution API..."
         );
 
 
         /*
-         * Get messages WITHOUT
-         * remoteJid filter.
+         * First request.
+         *
+         * This uses the actual response format
+         * from your server:
+         *
+         * messages.records
          */
 
-        await loadAllMessages();
+        await loadPage(
+            1,
+            true
+        );
+
+
+        connected = true;
+
+
+        document
+            .getElementById(
+                "headerSub"
+            )
+            .innerText =
+            "Connected";
+
+
+        setStatus(
+            "Connected"
+        );
 
 
     }
-    catch(error){
+    catch (error) {
 
         showError(
             error.message
         );
+
+
+        document
+            .getElementById(
+                "headerSub"
+            )
+            .innerText =
+            "Connection failed";
+
+    }
+    finally {
+
+        connectButton.disabled = false;
 
     }
 
@@ -780,17 +1006,19 @@ async function connect(){
    API REQUEST
 ========================================================= */
 
+
 async function apiRequest(
     endpoint,
     method = "GET",
     body = null
-){
+) {
+
 
     const options = {
 
-        method:method,
+        method: method,
 
-        headers:{
+        headers: {
 
             "Content-Type":
                 "application/json",
@@ -803,7 +1031,7 @@ async function apiRequest(
     };
 
 
-    if(body !== null){
+    if (body !== null) {
 
         options.body =
             JSON.stringify(
@@ -814,26 +1042,46 @@ async function apiRequest(
 
 
     console.log(
-        "REQUEST:",
+        "Evolution REQUEST:",
         API_URL + endpoint
     );
 
 
-    if(body !== null){
+    console.log(
+        "Evolution BODY:",
+        body
+    );
 
-        console.log(
-            "BODY:",
-            body
+
+    let response;
+
+
+    try {
+
+        response =
+            await fetch(
+                API_URL + endpoint,
+                options
+            );
+
+    }
+    catch (error) {
+
+        throw new Error(
+
+            "Failed to fetch Evolution API.\n\n" +
+
+            "URL:\n" +
+
+            API_URL + endpoint +
+
+            "\n\n" +
+
+            "This is usually caused by CORS, an incorrect Railway URL, HTTPS/HTTP mismatch, or the server being offline."
+
         );
 
     }
-
-
-    const response =
-        await fetch(
-            API_URL + endpoint,
-            options
-        );
 
 
     const text =
@@ -841,13 +1089,13 @@ async function apiRequest(
 
 
     console.log(
-        "STATUS:",
+        "Evolution STATUS:",
         response.status
     );
 
 
     console.log(
-        "RESPONSE:",
+        "Evolution RESPONSE:",
         text
     );
 
@@ -855,7 +1103,7 @@ async function apiRequest(
     let data;
 
 
-    try{
+    try {
 
         data =
             text
@@ -863,19 +1111,21 @@ async function apiRequest(
                 : {};
 
     }
-    catch{
+    catch {
 
         data = text;
 
     }
 
 
-    if(!response.ok){
+    if (!response.ok) {
 
         throw new Error(
 
-            "HTTP " +
+            "Evolution API HTTP " +
+
             response.status +
+
             "\n\n" +
 
             (
@@ -903,587 +1153,28 @@ async function apiRequest(
 
 
 /* =========================================================
-   LOAD ALL MESSAGES
+   LOAD PAGE
 ========================================================= */
 
-async function loadAllMessages(){
 
-    loading = true;
+async function loadPage(
+    page,
+    firstLoad = false
+) {
 
-    loadingElement.style.display =
-        "block";
 
+    if (loading) {
 
-    setStatus(
-        "Fetching Evolution messages..."
-    );
-
-
-    try{
-
-        /*
-         * IMPORTANT:
-         *
-         * Empty body.
-         *
-         * We deliberately do NOT send
-         * remoteJid because some Evolution
-         * versions have problems with that
-         * filter.
-         */
-
-        const data =
-            await apiRequest(
-
-                "/chat/findMessages/" +
-
-                encodeURIComponent(
-                    INSTANCE
-                ),
-
-                "POST",
-
-                {}
-
-            );
-
-
-        console.log(
-            "RAW EVOLUTION DATA:",
-            data
-        );
-
-
-        const list =
-            extractMessages(
-                data
-            );
-
-
-        console.log(
-            "TOTAL API MESSAGES:",
-            list.length
-        );
-
-
-        if(!list.length){
-
-            setStatus(
-                "Evolution returned 0 messages."
-            );
-
-
-            endElement.innerText =
-                "No messages returned by Evolution API.";
-
-
-            /*
-             * Show raw response for debugging.
-             */
-
-            showError(
-
-                "Evolution API returned no messages.\n\n" +
-
-                "RAW RESPONSE:\n" +
-
-                JSON.stringify(
-                    data,
-                    null,
-                    2
-                )
-
-            );
-
-
-            return;
-
-        }
-
-
-        /*
-         * Save everything locally.
-         */
-
-        allMessages =
-            list;
-
-
-        /*
-         * Find messages belonging to
-         * the requested phone.
-         */
-
-        const matching =
-            filterMessagesForPhone(
-                list,
-                PHONE
-            );
-
-
-        console.log(
-            "MATCHING MESSAGES:",
-            matching.length
-        );
-
-
-        /*
-         * If exact number matching gives
-         * zero, show available JIDs.
-         *
-         * This is extremely useful for
-         * diagnosing @lid.
-         */
-
-        if(!matching.length){
-
-            const jids =
-                getAvailableJids(
-                    list
-                );
-
-
-            showError(
-
-                "Evolution returned " +
-                list.length +
-                " messages, but none matched +" +
-                PHONE +
-                ".\n\n" +
-
-                "AVAILABLE JIDs:\n\n" +
-
-                jids.join("\n")
-
-            );
-
-
-            setStatus(
-                "Messages exist, but phone/JID did not match."
-            );
-
-
-            return;
-
-        }
-
-
-        /*
-         * Sort newest first internally.
-         */
-
-        matching.sort(
-            (a,b)=>
-                getTimestamp(b) -
-                getTimestamp(a)
-        );
-
-
-        /*
-         * Keep all matching messages.
-         */
-
-        allMessages =
-            matching;
-
-
-        /*
-         * Display newest 30.
-         */
-
-        displayedMessages =
-            matching
-            .slice(
-                0,
-                LIMIT
-            )
-            .reverse();
-
-
-        renderMessages();
-
-
-        /*
-         * Determine whether more
-         * messages exist.
-         */
-
-        hasMore =
-            matching.length >
-            LIMIT;
-
-
-        if(hasMore){
-
-            PAGE = 2;
-
-        }
-        else{
-
-            hasMore = false;
-
-            endElement.innerText =
-                "Beginning of conversation";
-
-        }
-
-
-        /*
-         * Scroll to bottom.
-         */
-
-        setTimeout(
-            () => {
-
-                chat.scrollTop =
-                    chat.scrollHeight;
-
-            },
-            100
-        );
-
-
-        setStatus(
-
-            "Loaded " +
-            matching.length +
-            " messages"
-
-        );
-
-
-    }
-    finally{
-
-        loading = false;
-
-        loadingElement.style.display =
-            "none";
-
-    }
-
-}
-
-
-/* =========================================================
-   FILTER BY PHONE
-========================================================= */
-
-function filterMessagesForPhone(
-    list,
-    phone
-){
-
-    const cleanPhone =
-        phone.replace(
-            /\D/g,
-            ""
-        );
-
-
-    return list.filter(
-        msg => {
-
-            const jid =
-                getRemoteJid(
-                    msg
-                );
-
-
-            if(!jid){
-
-                return false;
-
-            }
-
-
-            /*
-             * Convert JID to digits.
-             *
-             * Works for:
-             *
-             * 919605515958@s.whatsapp.net
-             *
-             * 919605515958@lid
-             */
-
-            const jidDigits =
-                jid.replace(
-                    /\D/g,
-                    ""
-                );
-
-
-            /*
-             * Exact match.
-             */
-
-            if(
-                jidDigits ===
-                cleanPhone
-            ){
-
-                return true;
-
-            }
-
-
-            /*
-             * Some JID formats may contain
-             * extra identifiers.
-             *
-             * Check whether the cleaned JID
-             * ends with the phone number.
-             */
-
-            if(
-                jidDigits.endsWith(
-                    cleanPhone
-                )
-            ){
-
-                return true;
-
-            }
-
-
-            return false;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   GET REMOTE JID
-========================================================= */
-
-function getRemoteJid(
-    msg
-){
-
-    return (
-
-        msg?.key?.remoteJid ||
-
-        msg?.remoteJid ||
-
-        msg?.key?.participant ||
-
-        ""
-
-    );
-
-}
-
-
-/* =========================================================
-   AVAILABLE JIDS
-========================================================= */
-
-function getAvailableJids(
-    list
-){
-
-    const set =
-        new Set();
-
-
-    for(
-        const msg
-        of list
-    ){
-
-        const jid =
-            getRemoteJid(
-                msg
-            );
-
-
-        if(jid){
-
-            set.add(
-                jid
-            );
-
-        }
+        return;
 
     }
 
 
-    return [
-        ...set
-    ].slice(
-        0,
-        100
-    );
+    if (
+        page > totalPages
+    ) {
 
-}
-
-
-/* =========================================================
-   EXTRACT MESSAGES
-========================================================= */
-
-function extractMessages(
-    data
-){
-
-    if(
-        Array.isArray(
-            data
-        )
-    ){
-
-        return data;
-
-    }
-
-
-    if(
-        Array.isArray(
-            data.messages
-        )
-    ){
-
-        return data.messages;
-
-    }
-
-
-    if(
-        Array.isArray(
-            data.response
-        )
-    ){
-
-        return data.response;
-
-    }
-
-
-    if(
-        data.response &&
-        Array.isArray(
-            data.response.messages
-        )
-    ){
-
-        return data.response.messages;
-
-    }
-
-
-    if(
-        Array.isArray(
-            data.data
-        )
-    ){
-
-        return data.data;
-
-    }
-
-
-    if(
-        data.data &&
-        Array.isArray(
-            data.data.messages
-        )
-    ){
-
-        return data.data.messages;
-
-    }
-
-
-    return [];
-
-}
-
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function renderMessages(){
-
-    messagesContainer.innerHTML = "";
-
-    displayedIds.clear();
-
-
-    for(
-        const msg
-        of displayedMessages
-    ){
-
-        const id =
-            getMessageId(
-                msg
-            );
-
-
-        if(
-            displayedIds.has(
-                id
-            )
-        ){
-
-            continue;
-
-        }
-
-
-        displayedIds.add(
-            id
-        );
-
-
-        messagesContainer.appendChild(
-            createMessageElement(
-                msg
-            )
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SCROLL UP
-========================================================= */
-
-chat.addEventListener(
-    "scroll",
-    () => {
-
-        if(
-            chat.scrollTop <= 100 &&
-            !loading &&
-            hasMore
-        ){
-
-            loadOlderMessages();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   LOAD OLDER
-========================================================= */
-
-async function loadOlderMessages(){
-
-    if(
-        loading ||
-        !hasMore
-    ){
+        hasReachedBeginning();
 
         return;
 
@@ -1496,97 +1187,337 @@ async function loadOlderMessages(){
         "block";
 
 
-    const oldHeight =
-        chat.scrollHeight;
+    if (firstLoad) {
+
+        setStatus(
+            "Loading messages..."
+        );
+
+    }
+    else {
+
+        setStatus(
+            "Loading older messages..."
+        );
+
+    }
 
 
-    const oldTop =
-        chat.scrollTop;
+    try {
 
-
-    try{
 
         /*
-         * We already fetched all matching
-         * messages.
+         * Evolution API accepts pagination
+         * for findMessages.
          *
-         * Take the next 30 older messages.
+         * offset = number of records per page
+         * page   = page number
          */
 
-        const start =
-            displayedMessages.length;
+        const body = {
+
+            page: page,
+
+            offset: PAGE_SIZE
+
+        };
 
 
-        const older =
-            allMessages.slice(
-                start,
-                start + LIMIT
+        const data =
+            await apiRequest(
+
+                "/chat/findMessages/" +
+
+                encodeURIComponent(
+                    INSTANCE
+                ),
+
+                "POST",
+
+                body
+
             );
 
 
-        if(!older.length){
+        console.log(
+            "FULL PAGE DATA:",
+            data
+        );
 
-            hasMore = false;
 
-            endElement.innerText =
-                "Beginning of conversation";
+        /*
+         * Get records from:
+         *
+         * data.messages.records
+         */
 
-            return;
+        const records =
+            extractRecords(
+                data
+            );
+
+
+        /*
+         * Get pagination information.
+         */
+
+        const pagination =
+            getPagination(
+                data,
+                page
+            );
+
+
+        totalPages =
+            pagination.pages;
+
+
+        currentPage =
+            pagination.currentPage;
+
+
+        console.log(
+            "PAGE:",
+            currentPage
+        );
+
+
+        console.log(
+            "TOTAL PAGES:",
+            totalPages
+        );
+
+
+        console.log(
+            "RECORDS:",
+            records.length
+        );
+
+
+        /*
+         * Find messages belonging to
+         * the requested phone number.
+         */
+
+        const matches =
+            filterConversation(
+                records,
+                PHONE
+            );
+
+
+        console.log(
+            "MATCHES ON PAGE:",
+            matches.length
+        );
+
+
+        /*
+         * Add matching messages.
+         */
+
+        addConversationMessages(
+            matches
+        );
+
+
+        /*
+         * If this is first load and
+         * no message was found, keep
+         * scanning older pages automatically.
+         */
+
+        if (
+            firstLoad &&
+            matches.length === 0
+        ) {
+
+
+            setStatus(
+
+                "Searching page " +
+                page +
+                " of " +
+                totalPages +
+                "..."
+
+            );
+
+
+            /*
+             * Search pages until the
+             * selected conversation is found.
+             *
+             * Maximum safety limit.
+             */
+
+            let found = false;
+
+
+            for (
+                let p = page + 1;
+
+                p <= totalPages;
+
+                p++
+            ) {
+
+
+                if (
+                    conversationMessages.length > 0
+                ) {
+
+                    found = true;
+
+                    break;
+
+                }
+
+
+                setStatus(
+
+                    "Searching conversation: page " +
+                    p +
+                    " / " +
+                    totalPages
+
+                );
+
+
+                const nextData =
+                    await apiRequest(
+
+                        "/chat/findMessages/" +
+
+                        encodeURIComponent(
+                            INSTANCE
+                        ),
+
+                        "POST",
+
+                        {
+
+                            page: p,
+
+                            offset: PAGE_SIZE
+
+                        }
+
+                    );
+
+
+                const nextRecords =
+                    extractRecords(
+                        nextData
+                    );
+
+
+                const nextMatches =
+                    filterConversation(
+                        nextRecords,
+                        PHONE
+                    );
+
+
+                addConversationMessages(
+                    nextMatches
+                );
+
+
+                currentPage =
+                    p;
+
+
+                if (
+                    nextMatches.length > 0
+                ) {
+
+                    found = true;
+
+                    break;
+
+                }
+
+            }
+
+
+            if (
+                conversationMessages.length === 0
+            ) {
+
+                showNoMessagesFound(
+                    data
+                );
+
+                return;
+
+            }
 
         }
 
 
         /*
-         * allMessages is newest → oldest.
-         *
-         * Convert to oldest → newest
-         * before adding to top.
+         * Sort oldest → newest.
          */
 
-        const olderForDisplay =
-            older.reverse();
+        conversationMessages.sort(
+            (a, b) =>
+                getTimestamp(a) -
+                getTimestamp(b)
+        );
 
 
-        displayedMessages =
-            olderForDisplay.concat(
-                displayedMessages
-            );
-
+        /*
+         * Render.
+         */
 
         renderMessages();
 
 
-        if(
-            displayedMessages.length >=
-            allMessages.length
-        ){
+        /*
+         * Scroll behavior.
+         */
 
-            hasMore = false;
+        if (firstLoad) {
 
-            endElement.innerText =
-                "Beginning of conversation";
+            setTimeout(
+                () => {
+
+                    chat.scrollTop =
+                        chat.scrollHeight;
+
+                },
+                50
+            );
 
         }
 
 
         /*
-         * Preserve scroll position.
+         * If we reached the last API page.
          */
 
-        const newHeight =
-            chat.scrollHeight;
+        if (
+            currentPage >=
+            totalPages
+        ) {
+
+            hasReachedBeginning();
+
+        }
 
 
-        chat.scrollTop =
-            oldTop +
-            (
-                newHeight -
-                oldHeight
-            );
+        setStatus(
+
+            "Loaded " +
+            conversationMessages.length +
+            " messages"
+
+        );
 
 
     }
-    finally{
+    finally {
 
         loading = false;
 
@@ -1599,12 +1530,477 @@ async function loadOlderMessages(){
 
 
 /* =========================================================
+   EXTRACT RECORDS
+========================================================= */
+
+
+function extractRecords(
+    data
+) {
+
+
+    /*
+     * THIS IS THE IMPORTANT FIX.
+     *
+     * Your response:
+     *
+     * data.messages.records
+     */
+
+    if (
+
+        data &&
+
+        data.messages &&
+
+        Array.isArray(
+            data.messages.records
+        )
+
+    ) {
+
+        return data.messages.records;
+
+    }
+
+
+    /*
+     * Other formats for compatibility.
+     */
+
+    if (
+        Array.isArray(data)
+    ) {
+
+        return data;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(
+            data.records
+        )
+    ) {
+
+        return data.records;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(
+            data.messages
+        )
+    ) {
+
+        return data.messages;
+
+    }
+
+
+    if (
+        data &&
+        Array.isArray(
+            data.data
+        )
+    ) {
+
+        return data.data;
+
+    }
+
+
+    if (
+        data &&
+        data.response &&
+        Array.isArray(
+            data.response
+        )
+    ) {
+
+        return data.response;
+
+    }
+
+
+    return [];
+
+}
+
+
+/* =========================================================
+   GET PAGINATION
+========================================================= */
+
+
+function getPagination(
+    data,
+    fallbackPage
+) {
+
+
+    if (
+        data &&
+        data.messages
+    ) {
+
+        return {
+
+            pages:
+                Number(
+                    data.messages.pages
+                ) || 1,
+
+            currentPage:
+                Number(
+                    data.messages.currentPage
+                ) ||
+                fallbackPage
+
+        };
+
+    }
+
+
+    return {
+
+        pages: 1,
+
+        currentPage:
+            fallbackPage
+
+    };
+
+}
+
+
+/* =========================================================
+   FILTER CONVERSATION
+========================================================= */
+
+
+function filterConversation(
+    records,
+    phone
+) {
+
+
+    const target =
+        cleanNumber(
+            phone
+        );
+
+
+    return records.filter(
+        msg => {
+
+
+            const key =
+                msg?.key || {};
+
+
+            const remoteJid =
+                key.remoteJid ||
+                msg.remoteJid ||
+                "";
+
+
+            const remoteJidAlt =
+                key.remoteJidAlt ||
+                msg.remoteJidAlt ||
+                "";
+
+
+            const participantAlt =
+                key.participantAlt ||
+                msg.participantAlt ||
+                "";
+
+
+            /*
+             * NORMAL DIRECT CHAT
+             *
+             * 919605515958@s.whatsapp.net
+             */
+
+            if (
+                jidMatchesNumber(
+                    remoteJid,
+                    target
+                )
+            ) {
+
+                return true;
+
+            }
+
+
+            /*
+             * LID DIRECT CHAT
+             *
+             * Example:
+             *
+             * 123456789@lid
+             *
+             * participantAlt:
+             *
+             * 919605515958@s.whatsapp.net
+             */
+
+            if (
+                String(
+                    remoteJid
+                ).endsWith(
+                    "@lid"
+                )
+            ) {
+
+
+                if (
+                    jidMatchesNumber(
+                        remoteJidAlt,
+                        target
+                    )
+                ) {
+
+                    return true;
+
+                }
+
+
+                if (
+                    jidMatchesNumber(
+                        participantAlt,
+                        target
+                    )
+                ) {
+
+                    return true;
+
+                }
+
+            }
+
+
+            /*
+             * DO NOT match participantAlt
+             * for group messages.
+             *
+             * Your uploaded response contains:
+             *
+             * remoteJid = ...@g.us
+             * participantAlt = phone@s.whatsapp.net
+             *
+             * Those are group messages, not
+             * the private chat with that number.
+             */
+
+            return false;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   JID MATCH
+========================================================= */
+
+
+function jidMatchesNumber(
+    jid,
+    target
+) {
+
+
+    if (!jid) {
+
+        return false;
+
+    }
+
+
+    const value =
+        String(jid);
+
+
+    /*
+     * Ignore groups.
+     */
+
+    if (
+        value.endsWith(
+            "@g.us"
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    /*
+     * Ignore broadcasts.
+     */
+
+    if (
+        value.includes(
+            "status@"
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    const digits =
+        cleanNumber(
+            value
+        );
+
+
+    if (!digits) {
+
+        return false;
+
+    }
+
+
+    return (
+
+        digits === target ||
+
+        digits.endsWith(target)
+
+    );
+
+}
+
+
+/* =========================================================
+   CLEAN NUMBER
+========================================================= */
+
+
+function cleanNumber(
+    value
+) {
+
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /\D/g,
+        ""
+    );
+
+}
+
+
+/* =========================================================
+   ADD MESSAGES
+========================================================= */
+
+
+function addConversationMessages(
+    messages
+) {
+
+
+    for (
+        const msg
+        of messages
+    ) {
+
+
+        const id =
+            getMessageId(
+                msg
+            );
+
+
+        if (
+            messageIds.has(
+                id
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        messageIds.add(
+            id
+        );
+
+
+        conversationMessages.push(
+            msg
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER MESSAGES
+========================================================= */
+
+
+function renderMessages() {
+
+
+    messagesContainer.innerHTML =
+        "";
+
+
+    /*
+     * Always sort oldest → newest.
+     */
+
+    conversationMessages.sort(
+        (a, b) =>
+            getTimestamp(a) -
+            getTimestamp(b)
+    );
+
+
+    for (
+        const msg
+        of conversationMessages
+    ) {
+
+
+        messagesContainer.appendChild(
+
+            createMessageElement(
+                msg
+            )
+
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    CREATE MESSAGE
 ========================================================= */
 
+
 function createMessageElement(
     msg
-){
+) {
+
 
     const fromMe =
         Boolean(
@@ -1620,6 +2016,7 @@ function createMessageElement(
 
     wrapper.className =
         "message " +
+
         (
             fromMe
                 ? "outgoing"
@@ -1637,18 +2034,8 @@ function createMessageElement(
         "bubble";
 
 
-    const text =
-        document.createElement(
-            "div"
-        );
-
-
-    text.className =
-        "text";
-
-
-    text.innerText =
-        getMessageText(
+    const content =
+        createMessageContent(
             msg
         );
 
@@ -1672,7 +2059,7 @@ function createMessageElement(
 
 
     bubble.appendChild(
-        text
+        content
     );
 
 
@@ -1692,101 +2079,278 @@ function createMessageElement(
 
 
 /* =========================================================
-   MESSAGE TEXT
+   CREATE MESSAGE CONTENT
 ========================================================= */
 
-function getMessageText(
+
+function createMessageContent(
     msg
-){
+) {
+
+
+    const container =
+        document.createElement(
+            "div"
+        );
+
 
     const message =
-        msg?.message ||
-        {};
+        msg?.message || {};
 
 
-    if(
-        typeof message.conversation ===
+    /*
+     * TEXT
+     */
+
+    if (
+        typeof
+        message.conversation ===
         "string"
-    ){
+    ) {
 
-        return message.conversation;
+
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
+            message.conversation;
+
+
+        container.appendChild(
+            text
+        );
+
+
+        return container;
 
     }
 
 
-    if(
-        message.extendedTextMessage
-    ){
+    /*
+     * EXTENDED TEXT
+     */
 
-        return (
+    if (
+        message.extendedTextMessage
+    ) {
+
+
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
 
             message
             .extendedTextMessage
             .text ||
 
-            ""
+            "";
 
+
+        container.appendChild(
+            text
         );
+
+
+        return container;
 
     }
 
 
-    if(
+    /*
+     * IMAGE
+     */
+
+    if (
         message.imageMessage
-    ){
+    ) {
 
-        return (
 
-            "📷 " +
+        const image =
+            document.createElement(
+                "img"
+            );
 
-            (
-                message
-                .imageMessage
-                .caption ||
 
-                "Image"
-            )
+        image.className =
+            "media";
 
+
+        image.src =
+
+            message
+            .imageMessage
+            .jpegThumbnail
+
+                ? "data:image/jpeg;base64," +
+
+                    message
+                    .imageMessage
+                    .jpegThumbnail
+
+                : "";
+
+
+        image.alt =
+            "Image";
+
+
+        container.appendChild(
+            image
         );
+
+
+        const caption =
+
+            message
+            .imageMessage
+            .caption;
+
+
+        if (caption) {
+
+            const c =
+                document.createElement(
+                    "div"
+                );
+
+
+            c.className =
+                "caption";
+
+
+            c.innerText =
+                caption;
+
+
+            container.appendChild(
+                c
+            );
+
+        }
+
+
+        return container;
 
     }
 
 
-    if(
+    /*
+     * VIDEO
+     */
+
+    if (
         message.videoMessage
-    ){
+    ) {
 
-        return (
 
-            "🎥 " +
+        const text =
+            document.createElement(
+                "div"
+            );
 
-            (
-                message
-                .videoMessage
-                .caption ||
 
-                "Video"
-            )
+        text.className =
+            "text";
 
+
+        text.innerText =
+            "🎥 Video";
+
+
+        const caption =
+
+            message
+            .videoMessage
+            .caption;
+
+
+        if (caption) {
+
+            text.innerText +=
+                "\n" +
+                caption;
+
+        }
+
+
+        container.appendChild(
+            text
         );
 
+
+        return container;
+
     }
 
 
-    if(
+    /*
+     * AUDIO
+     */
+
+    if (
         message.audioMessage
-    ){
+    ) {
 
-        return "🎵 Audio";
+
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
+            "🎵 Audio";
+
+
+        container.appendChild(
+            text
+        );
+
+
+        return container;
 
     }
 
 
-    if(
-        message.documentMessage
-    ){
+    /*
+     * DOCUMENT
+     */
 
-        return (
+    if (
+        message.documentMessage
+    ) {
+
+
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
 
             "📄 " +
 
@@ -1796,26 +2360,82 @@ function getMessageText(
                 .fileName ||
 
                 "Document"
-            )
+            );
 
+
+        container.appendChild(
+            text
         );
 
+
+        return container;
+
     }
 
 
-    if(
+    /*
+     * STICKER
+     */
+
+    if (
         message.stickerMessage
-    ){
+    ) {
 
-        return "🖼️ Sticker";
+
+        const text =
+            document.createElement(
+                "div"
+            );
+
+
+        text.className =
+            "text";
+
+
+        text.innerText =
+            "🖼️ Sticker";
+
+
+        container.appendChild(
+            text
+        );
+
+
+        return container;
 
     }
 
 
-    return (
-        msg.messageType ||
-        "Message"
+    /*
+     * UNKNOWN MESSAGE
+     */
+
+    const text =
+        document.createElement(
+            "div"
+        );
+
+
+    text.className =
+        "text";
+
+
+    text.innerText =
+
+        "📩 " +
+
+        (
+            msg.messageType ||
+            "Message"
+        );
+
+
+    container.appendChild(
+        text
     );
+
+
+    return container;
 
 }
 
@@ -1824,9 +2444,11 @@ function getMessageText(
    MESSAGE ID
 ========================================================= */
 
+
 function getMessageId(
     msg
-){
+) {
+
 
     return (
 
@@ -1835,10 +2457,10 @@ function getMessageId(
         msg?.id ||
 
         (
-            "generated-" +
+            "unknown-" +
+            getTimestamp(msg) +
+            "-" +
             Math.random()
-                .toString(36)
-                .slice(2)
         )
 
     );
@@ -1850,11 +2472,13 @@ function getMessageId(
    TIMESTAMP
 ========================================================= */
 
+
 function getTimestamp(
     msg
-){
+) {
 
-    let t =
+
+    let timestamp =
 
         msg?.messageTimestamp ||
 
@@ -1863,45 +2487,44 @@ function getTimestamp(
         0;
 
 
-    if(
-        typeof t ===
+    if (
+        typeof timestamp ===
         "object"
-    ){
+    ) {
 
-        t =
 
-            t.low ||
+        timestamp =
 
-            t.seconds ||
+            timestamp.low ||
+
+            timestamp.seconds ||
 
             0;
 
     }
 
 
-    t =
-        Number(t);
+    timestamp =
+        Number(
+            timestamp
+        );
 
 
-    if(
-        !t
-    ){
+    /*
+     * Seconds → milliseconds
+     */
 
-        return 0;
+    if (
+        timestamp > 0 &&
+        timestamp < 100000000000
+    ) {
 
-    }
-
-
-    if(
-        t < 100000000000
-    ){
-
-        return t * 1000;
+        timestamp *= 1000;
 
     }
 
 
-    return t;
+    return timestamp || 0;
 
 }
 
@@ -1910,27 +2533,369 @@ function getTimestamp(
    TIME
 ========================================================= */
 
+
 function formatTime(
     timestamp
-){
+) {
 
-    if(
-        !timestamp
-    ){
+
+    if (!timestamp) {
 
         return "";
 
     }
 
 
-    return new Date(
-        timestamp
-    ).toLocaleTimeString(
+    const date =
+        new Date(
+            timestamp
+        );
+
+
+    return date.toLocaleString(
         [],
         {
-            hour:"2-digit",
-            minute:"2-digit"
+
+            day: "2-digit",
+
+            month: "2-digit",
+
+            hour: "2-digit",
+
+            minute: "2-digit"
+
         }
+    );
+
+}
+
+
+/* =========================================================
+   SCROLL UP
+========================================================= */
+
+
+chat.addEventListener(
+    "scroll",
+    async function () {
+
+
+        /*
+         * When user reaches the top,
+         * load the next Evolution page.
+         */
+
+        if (
+            chat.scrollTop <= 100 &&
+            !loading &&
+            currentPage < totalPages
+        ) {
+
+
+            /*
+             * Save current height.
+             *
+             * This lets us keep the user's
+             * position after adding older
+             * messages.
+             */
+
+            const oldHeight =
+                chat.scrollHeight;
+
+
+            const oldTop =
+                chat.scrollTop;
+
+
+            const nextPage =
+                currentPage + 1;
+
+
+            await loadOlderPage(
+                nextPage
+            );
+
+
+            /*
+             * Keep scroll position.
+             */
+
+            const newHeight =
+                chat.scrollHeight;
+
+
+            chat.scrollTop =
+
+                oldTop +
+
+                (
+                    newHeight -
+                    oldHeight
+                );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOAD OLDER PAGE
+========================================================= */
+
+
+async function loadOlderPage(
+    page
+) {
+
+
+    if (
+        loading ||
+        page > totalPages
+    ) {
+
+        return;
+
+    }
+
+
+    loading = true;
+
+    loadingElement.style.display =
+        "block";
+
+
+    try {
+
+
+        setStatus(
+
+            "Loading older messages... " +
+
+            page +
+
+            " / " +
+
+            totalPages
+
+        );
+
+
+        const data =
+            await apiRequest(
+
+                "/chat/findMessages/" +
+
+                encodeURIComponent(
+                    INSTANCE
+                ),
+
+                "POST",
+
+                {
+
+                    page: page,
+
+                    offset: PAGE_SIZE
+
+                }
+
+            );
+
+
+        const records =
+            extractRecords(
+                data
+            );
+
+
+        const matches =
+            filterConversation(
+                records,
+                PHONE
+            );
+
+
+        addConversationMessages(
+            matches
+        );
+
+
+        currentPage =
+            page;
+
+
+        /*
+         * Sort and render.
+         */
+
+        conversationMessages.sort(
+            (a, b) =>
+                getTimestamp(a) -
+                getTimestamp(b)
+        );
+
+
+        renderMessages();
+
+
+        if (
+            currentPage >=
+            totalPages
+        ) {
+
+            hasReachedBeginning();
+
+        }
+
+
+        setStatus(
+
+            "Loaded " +
+
+            conversationMessages.length +
+
+            " messages"
+
+        );
+
+
+    }
+    catch (error) {
+
+
+        showError(
+            "Failed to load older messages.\n\n" +
+            error.message
+        );
+
+
+    }
+    finally {
+
+        loading = false;
+
+        loadingElement.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   BEGINNING
+========================================================= */
+
+
+function hasReachedBeginning() {
+
+
+    endElement.innerText =
+        "Beginning of conversation";
+
+}
+
+
+/* =========================================================
+   NO MESSAGES
+========================================================= */
+
+
+function showNoMessagesFound(
+    data
+) {
+
+
+    setStatus(
+        "No messages found for +" +
+        PHONE
+    );
+
+
+    endElement.innerText =
+        "No messages found for +" +
+        PHONE;
+
+
+    /*
+     * Show useful debugging information.
+     */
+
+    const firstRecords =
+        extractRecords(
+            data
+        );
+
+
+    const jids =
+        [];
+
+
+    for (
+        const msg
+        of firstRecords
+    ) {
+
+
+        const key =
+            msg?.key || {};
+
+
+        const values = [
+
+            key.remoteJid,
+
+            key.remoteJidAlt,
+
+            key.participant,
+
+            key.participantAlt
+
+        ];
+
+
+        for (
+            const value
+            of values
+        ) {
+
+
+            if (
+                value &&
+                !jids.includes(
+                    value
+                )
+            ) {
+
+                jids.push(
+                    value
+                );
+
+            }
+
+        }
+
+    }
+
+
+    showError(
+
+        "No messages found for +" +
+
+        PHONE +
+
+        ".\n\n" +
+
+        "The API itself is returning messages.\n\n" +
+
+        "Some JIDs from the API:\n\n" +
+
+        jids
+            .slice(0, 30)
+            .join("\n")
+
     );
 
 }
@@ -1940,7 +2905,9 @@ function formatTime(
    SEND MESSAGE
 ========================================================= */
 
-async function sendMessage(){
+
+async function sendMessage() {
+
 
     const input =
         document.getElementById(
@@ -1952,25 +2919,41 @@ async function sendMessage(){
         input.value.trim();
 
 
-    if(
-        !text
-    ){
+    if (!text) {
 
         return;
 
     }
 
 
-    try{
+    if (!connected) {
+
+        showError(
+            "Connect to Evolution API first."
+        );
+
+        return;
+
+    }
+
+
+    sendButton.disabled =
+        true;
+
+
+    clearError();
+
+
+    try {
+
 
         setStatus(
-            "Sending..."
+            "Sending message..."
         );
 
 
         /*
-         * Current Evolution API docs use
-         * /message/sendText/{instance}.
+         * Evolution sendText endpoint.
          */
 
         const data =
@@ -2003,18 +2986,21 @@ async function sendMessage(){
         );
 
 
-        input.value = "";
+        input.value =
+            "";
 
 
         /*
-         * Add sent message immediately.
+         * Add local outgoing message
+         * immediately.
          */
 
-        const newMessage = {
+        const localMessage = {
 
-            key:{
+            key: {
 
                 id:
+
                     data?.key?.id ||
 
                     (
@@ -2022,12 +3008,11 @@ async function sendMessage(){
                         Date.now()
                     ),
 
-                fromMe:true,
+                fromMe: true,
 
                 remoteJid:
-                    getRemoteJid(
-                        data
-                    ) ||
+
+                    data?.key?.remoteJid ||
 
                     (
                         PHONE +
@@ -2036,7 +3021,7 @@ async function sendMessage(){
 
             },
 
-            message:{
+            message: {
 
                 conversation:
                     text
@@ -2044,23 +3029,45 @@ async function sendMessage(){
             },
 
             messageTimestamp:
+
                 Math.floor(
-                    Date.now() / 1000
+                    Date.now() /
+                    1000
                 )
 
         };
 
 
-        displayedMessages.push(
-            newMessage
+        addConversationMessages(
+            [
+                localMessage
+            ]
+        );
+
+
+        conversationMessages.sort(
+            (a, b) =>
+                getTimestamp(a) -
+                getTimestamp(b)
         );
 
 
         renderMessages();
 
 
-        chat.scrollTop =
-            chat.scrollHeight;
+        /*
+         * Scroll to bottom.
+         */
+
+        setTimeout(
+            () => {
+
+                chat.scrollTop =
+                    chat.scrollHeight;
+
+            },
+            50
+        );
 
 
         setStatus(
@@ -2069,12 +3076,22 @@ async function sendMessage(){
 
 
     }
-    catch(error){
+    catch (error) {
+
 
         showError(
+
             "SEND FAILED\n\n" +
+
             error.message
+
         );
+
+    }
+    finally {
+
+        sendButton.disabled =
+            false;
 
     }
 
@@ -2082,19 +3099,32 @@ async function sendMessage(){
 
 
 /* =========================================================
-   ENTER
+   ENTER TO SEND
 ========================================================= */
+
 
 function handleEnter(
     event
-){
+) {
 
-    if(
+
+    if (
         event.key ===
         "Enter"
-    ){
+    ) {
+
+
+        if (
+            event.shiftKey
+        ) {
+
+            return;
+
+        }
+
 
         event.preventDefault();
+
 
         sendMessage();
 
@@ -2107,9 +3137,11 @@ function handleEnter(
    STATUS
 ========================================================= */
 
+
 function setStatus(
     text
-){
+) {
+
 
     statusElement.innerText =
         text;
@@ -2121,15 +3153,19 @@ function setStatus(
    ERROR
 ========================================================= */
 
+
 function showError(
     text
-){
+) {
+
 
     errorElement.innerText =
         text;
 
+
     errorElement.style.display =
         "block";
+
 
     setStatus(
         "Error"
@@ -2142,17 +3178,31 @@ function showError(
    CLEAR ERROR
 ========================================================= */
 
-function clearError(){
+
+function clearError() {
+
 
     errorElement.innerText =
         "";
+
 
     errorElement.style.display =
         "none";
 
 }
 
+
+/* =========================================================
+   START
+========================================================= */
+
+
+console.log(
+    "Evolution WhatsApp Chat loaded."
+);
+
 </script>
 
 </body>
+
 </html>
